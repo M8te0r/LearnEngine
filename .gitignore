@@ -1,3 +1,35 @@
+# Mac ================================
+.DS_Store 
+*/.DS_Store
+
+# vscode ================================
+./vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# CMake ================================
+cmake-build-*/
+bin/
+build/
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
+# Clangd ================================
+.cache
+.cache/*
+
+# C++ ================================
 # Prerequisites
 *.d
 
@@ -30,3 +62,5 @@
 *.exe
 *.out
 *.app
+
+
