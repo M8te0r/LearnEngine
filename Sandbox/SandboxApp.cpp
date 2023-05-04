@@ -1,6 +1,5 @@
 
-
-#include "Engine/src/Engine.h"
+#include "Engine.h"
 
 class Sandbox : public Kaleidoscope::Application
 {

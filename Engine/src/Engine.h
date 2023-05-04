@@ -1,12 +1,11 @@
 #pragma once
 
+// 设置当前平台为macos
 #define KLD_PLATFORM_MACOS
 
-
-
 // 用于editor引用的头文件
-#include "runtime/Application.h"
-#include "runtime/Log.h"
+#include "Kaleidoscope/Application.h"
+#include "Kaleidoscope/Log.h"
 
 // 入口
-#include "runtime/EntryPoint.h"
+#include "Kaleidoscope/EntryPoint.h"

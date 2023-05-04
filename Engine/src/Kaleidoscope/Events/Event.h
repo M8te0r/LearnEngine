@@ -1,10 +1,6 @@
 #pragma once
 
-#include "runtime/Core.h"
-
-#include <string>
-#include <functional>
-#include <sstream>
+#include "Kaleidoscope/Core.h"
 
 namespace Kaleidoscope
 {

@@ -1,16 +1,20 @@
 #pragma once
 
 #include "Core.h"
+#include "Window.h"
+
 namespace Kaleidoscope
 {
     class Application
     {
-    private:
-        /* data */
     public:
         Application();
         virtual ~Application();
         void Run();
+
+    private:
+        std::unique_ptr<Window> m_Window;
+        bool m_Running = true;
     };
 
     // 在客户端定义
