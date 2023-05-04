@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kaleidoscope/Core.h"
+#include <functional>
 
 namespace Kaleidoscope
 {
@@ -38,6 +39,7 @@ namespace Kaleidoscope
         EventCategoryMouseButton = BIT(4)
     };
 
+// 定义一个宏，用于在每个Event派生类中获取当前Event的类型名称
 #define EVENT_CLASS_TYPE(type)                                                  \
     static EventType GetStaticType() { return EventType::type; }                \
     virtual EventType GetEventType() const override { return GetStaticType(); } \
@@ -65,20 +67,23 @@ namespace Kaleidoscope
         }
     };
 
+    /// @brief event派遣
+
     class EventDispatcher
     {
-        template <typename T>
-        using EventFn = std::function<bool(T &)>;
-
     public:
-        EventDispatcher(Event &event) : m_Event(event) {}
+        EventDispatcher(Event &event)
+            : m_Event(event)
+        {
+        }
 
-        template <typename T>
-        bool Dispatch(EventFn<T> &func)
+        // F will be deduced by the compiler
+        template <typename T, typename F>
+        bool Dispatch(const F &func)
         {
             if (m_Event.GetEventType() == T::GetStaticType())
             {
-                m_Event.Handled = func(*(T *)&m_Event);
+                m_Event.Handled |= func(static_cast<T &>(m_Event));
                 return true;
             }
             return false;

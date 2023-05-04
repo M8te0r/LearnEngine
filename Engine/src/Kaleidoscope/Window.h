@@ -1,5 +1,6 @@
 #include "Kaleidoscope/Core.h"
 #include "Kaleidoscope/Events/Event.h"
+#include <sstream>
 
 namespace Kaleidoscope
 {

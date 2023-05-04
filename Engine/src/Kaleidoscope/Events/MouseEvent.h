@@ -1,5 +1,5 @@
 #pragma once
-#include "Event.h"
+#include "Kaleidoscope/Events/Event.h"
 
 namespace Kaleidoscope
 {
@@ -26,7 +26,7 @@ namespace Kaleidoscope
 
     class MouseScrolledEvent : public Event
     {
-
+    public:
         MouseScrolledEvent(float xOffset, float yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {}
         inline float GetXOffset() const { return m_XOffset; }
         inline float GetYOffset() const { return m_YOffset; }
@@ -55,7 +55,7 @@ namespace Kaleidoscope
         int m_Button;
     };
 
-    class MouseButtonPressedEvent::public MouseButtonEvent
+    class MouseButtonPressedEvent : public MouseButtonEvent
     {
     public:
         MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
@@ -70,7 +70,7 @@ namespace Kaleidoscope
         EVENT_CLASS_TYPE(MouseButtonPressed);
     };
 
-    class MouseButtonReleasedEvent::public MouseButtonEvent
+    class MouseButtonReleasedEvent : public MouseButtonEvent
     {
     public:
         MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}

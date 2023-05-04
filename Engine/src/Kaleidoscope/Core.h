@@ -1,4 +1,5 @@
 #pragma once
+
 #ifdef KLD_PLATFORM_WINDOWS
 #ifdef KLD_BUILD_DLL
 #define KLD_API ___declspec(dllexport)
@@ -12,6 +13,7 @@
 #define KLD_API
 #endif
 
+// 调试用
 #ifdef KLD_ENABLE_ASSERTS
 #define KLD_ASSERT(x, ...)                                    \
     {                                                         \

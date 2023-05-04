@@ -1,6 +1,6 @@
 #include "kldpch.h"
 
-#include "Log.h"
+#include "Kaleidoscope/Log.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace Kaleidoscope

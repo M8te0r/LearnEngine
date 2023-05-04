@@ -1,5 +1,5 @@
 #pragma once
-#include "Event.h"
+#include "Kaleidoscope/Events/Event.h"
 
 namespace Kaleidoscope
 {
@@ -29,7 +29,7 @@ namespace Kaleidoscope
         int m_RepeatCount;
     };
 
-    class KeyReleasedEvent : public Event
+    class KeyReleasedEvent : public KeyEvent
     {
     public:
         KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
