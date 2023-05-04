@@ -1,0 +1,1 @@
+/usr/bin/clang++  -Wall  -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/Kaleidoscope.dir/SandboxApp.cpp.o -o /Users/crystalized/cpp_project/LearnEngine/bin/Kaleidoscope  ../Engine/libEngine.a ../Engine/vendor/spdlog/libspdlogd.a 

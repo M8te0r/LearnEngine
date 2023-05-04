@@ -1,0 +1,2 @@
+/usr/bin/ar qc libkaleido.a CMakeFiles/kaleido.dir/src/Test.cpp.o
+/usr/bin/ranlib libkaleido.a
