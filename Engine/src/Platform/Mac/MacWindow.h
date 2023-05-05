@@ -1,7 +1,10 @@
 #pragma once
 #include "Kaleidoscope/Window.h"
 
+// GLFW和glad共用时需要启用（定义在cmake里）
+// #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
+
 namespace Kaleidoscope
 {
     class MacWindow : public Window

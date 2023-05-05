@@ -16,6 +16,7 @@ target_include_directories(
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor
+    ${glad_include_dir}
     ${spdlog_include_dir}
     # ${OPENGL_INCLUDE_DIR}
     )
@@ -27,6 +28,14 @@ target_precompile_headers(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/kldpch.h
 )
 
+# 宏
+# add_compile_definitions(GLFW_INCLUDE_NONE)
+target_compile_definitions(
+    ${LIB_NAME}  
+    PRIVATE
+    "GLFW_INCLUDE_NONE"
+    )
+
 
 target_link_libraries(
     ${LIB_NAME} 
@@ -34,5 +43,6 @@ target_link_libraries(
     spdlog
     glfw
     OpenGL::GL
+    glad
 )
 

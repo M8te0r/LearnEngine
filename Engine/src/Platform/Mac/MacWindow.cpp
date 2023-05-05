@@ -5,6 +5,9 @@
 #include "Kaleidoscope/Events/MouseEvent.h"
 #include "Kaleidoscope/Events/KeyEvent.h"
 
+
+#include "glad/glad.h"
+
 namespace Kaleidoscope
 {
     static bool s_GLFWInitialized = false;
@@ -46,6 +49,9 @@ namespace Kaleidoscope
         }
         m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_Window);
+        // 使用glad载入所有opengl函数指针
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        KLD_CORE_ASSERT(status, "Failed to initialize Glad!");
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
 
