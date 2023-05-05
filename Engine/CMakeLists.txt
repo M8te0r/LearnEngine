@@ -17,6 +17,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor
     ${spdlog_include_dir}
+    # ${OPENGL_INCLUDE_DIR}
     )
 
 # 预编译文件

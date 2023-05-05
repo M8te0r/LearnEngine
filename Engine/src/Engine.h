@@ -5,6 +5,7 @@
 
 // 用于editor引用的头文件
 #include "Kaleidoscope/Application.h"
+#include "Kaleidoscope/Layer.h"
 #include "Kaleidoscope/Log.h"
 
 // 入口

@@ -45,6 +45,7 @@ namespace Kaleidoscope
     virtual EventType GetEventType() const override { return GetStaticType(); } \
     virtual const char *GetName() const override { return #type; }
 
+// 定义一个宏，用于在每个Event派生类中获取当前Event的所属的分类
 #define EVENT_CLASS_CATEGORY(category) \
     virtual int GetCategoryFlags() const override { return category; }
 
@@ -67,7 +68,7 @@ namespace Kaleidoscope
         }
     };
 
-    /// @brief event派遣
+    /// @brief event派遣类，
 
     class EventDispatcher
     {
