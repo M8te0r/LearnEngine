@@ -21,6 +21,7 @@ namespace Kaleidoscope
         AppRender,
         KeyPressed,
         KeyReleased,
+        KeyTyped,
         // 鼠标
         MouseButtonPressed,
         MouseButtonReleased,

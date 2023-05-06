@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Kaleidoscope VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -Wall ")
+set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -Wall -Wformat")
 # set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -Wall -O3")
 
 # 可执行文件输出路径

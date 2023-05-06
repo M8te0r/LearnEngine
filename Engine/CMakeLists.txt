@@ -11,13 +11,16 @@ add_subdirectory(vendor)
 add_library(${LIB_NAME} ${engine_head_files} ${engine_source_files})
 
 
+message(test ${spdlog_include_dir})
 target_include_directories(
     ${LIB_NAME} 
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor
-    ${glad_include_dir}
-    ${spdlog_include_dir}
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui
+    # ${glad_include_dir}
+    # ${spdlog_include_dir}
+    # ${imgui_root_dir}
     # ${OPENGL_INCLUDE_DIR}
     )
 
@@ -44,5 +47,6 @@ target_link_libraries(
     glfw
     OpenGL::GL
     glad
+    imgui
 )
 

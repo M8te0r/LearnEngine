@@ -13,7 +13,7 @@ public:
 
     void OnEvent(Kaleidoscope::Event &event) override
     {
-        KLD_TRACE("{0}", event);
+        // KLD_TRACE("{0}", event);
     }
 };
 
@@ -23,6 +23,7 @@ public:
     Sandbox()
     {
         PushLayer(new ExampleLayer());
+        PushOverlay(new Kaleidoscope::ImGuiLayer());
     }
     ~Sandbox()
     {

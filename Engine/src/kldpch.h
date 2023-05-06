@@ -16,9 +16,8 @@
 #include "Kaleidoscope/Log.h"
 
 #ifdef KLD_PLATFORM_WINDOWS
-#include <windows.h>
+#include <Windows.h>
 #endif
 
 #ifdef KLD_PLATFORM_MACOS
-
 #endif
