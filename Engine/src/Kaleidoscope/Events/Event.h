@@ -99,4 +99,5 @@ namespace Kaleidoscope
     {
         return os << e.ToString();
     }
+
 } // namespace Kaleidoscope

@@ -54,6 +54,7 @@ namespace Kaleidoscope
         // #ifdef __APPLE__
         //         io.DisplayFramebufferScale = ImVec2(2.0f, 2.0f);
         // #endif
+        // TODO 并没有被定义
 #ifdef KLD_PLATFORM_MACOS
         io.DisplayFramebufferScale = ImVec2(2.0f, 2.0f);
 #endif

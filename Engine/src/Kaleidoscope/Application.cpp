@@ -1,9 +1,13 @@
 #include "kldpch.h"
 #include "Kaleidoscope/Application.h"
 
+#include "Kaleidoscope/Log.h"
+
 #include "glad/glad.h"
 
 #include "Kaleidoscope/Input.h"
+
+#include "glm/glm.hpp"
 
 namespace Kaleidoscope
 {
@@ -66,8 +70,7 @@ namespace Kaleidoscope
             {
                 layer->OnUpdate();
             }
-            auto [x, y] = Input::GetMousePosition();
-            KLD_CORE_TRACE("{0}, {1}", x, y);
+
             m_Window->OnUpdate();
         }
     }

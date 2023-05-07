@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Kaleidoscope/Core.h"
 #include "Kaleidoscope/Window.h"
 #include "Kaleidoscope/LayerStack.h"
 #include "Kaleidoscope/Events/Event.h"

@@ -23,6 +23,9 @@ option(GLFW_BUILD_DOCS "" OFF)
 option(GLFW_INSTALL "" OFF)
 add_subdirectory(glfw)
 
+# glm
+add_subdirectory(glm)
+
 # glad
 set(glad_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/glad/include)
 set(glad_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/glad/src)

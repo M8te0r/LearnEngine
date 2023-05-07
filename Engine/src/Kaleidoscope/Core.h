@@ -11,6 +11,7 @@
 
 #ifdef KLD_PLATFORM_MACOS
 #define KLD_API
+
 #endif
 
 // 调试用
