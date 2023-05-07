@@ -51,7 +51,12 @@ namespace Kaleidoscope
         ImGuiIO &io = ImGui::GetIO();
         Application &app = Application::Get();
         io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+        // #ifdef __APPLE__
+        //         io.DisplayFramebufferScale = ImVec2(2.0f, 2.0f);
+        // #endif
+#ifdef KLD_PLATFORM_MACOS
         io.DisplayFramebufferScale = ImVec2(2.0f, 2.0f);
+#endif
 
         float time = (float)glfwGetTime();
         io.DeltaTime = m_Time > 0.0 ? (time - m_Time) : (1.0f / 60.0f);

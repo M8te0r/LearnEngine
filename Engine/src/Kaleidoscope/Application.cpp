@@ -3,6 +3,8 @@
 
 #include "glad/glad.h"
 
+#include "Kaleidoscope/Input.h"
+
 namespace Kaleidoscope
 {
 
@@ -64,6 +66,8 @@ namespace Kaleidoscope
             {
                 layer->OnUpdate();
             }
+            auto [x, y] = Input::GetMousePosition();
+            KLD_CORE_TRACE("{0}, {1}", x, y);
             m_Window->OnUpdate();
         }
     }
