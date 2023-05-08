@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Kaleidoscope/Core.h"
+
+
 #include "Kaleidoscope/Window.h"
 #include "Kaleidoscope/LayerStack.h"
 #include "Kaleidoscope/Events/Event.h"
 #include "Kaleidoscope/Events/ApplicationEvent.h"
+#include "Kaleidoscope/ImGui/ImGuiLayer.h"
 
 namespace Kaleidoscope
 {
@@ -26,6 +29,7 @@ namespace Kaleidoscope
     private:
         bool OnWindowClose(WindowCloseEvent &e);
         std::unique_ptr<Window> m_Window;
+        ImGuiLayer* m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
 

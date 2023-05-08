@@ -5,8 +5,6 @@ namespace Kaleidoscope
 {
     LayerStack::LayerStack()
     {
-        // 初始化layer层，插入位置为队头
-        m_LayerInsert = m_Layers.begin();
     }
 
     LayerStack::~LayerStack()
@@ -20,7 +18,8 @@ namespace Kaleidoscope
     void LayerStack::PushLayer(Layer *layer)
     {
         // 在m_LayerInsert位置插入layer
-        m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
+        m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
+        m_LayerInsertIndex++;
     }
 
     void LayerStack::PushOverlay(Layer *overlay)
@@ -37,7 +36,7 @@ namespace Kaleidoscope
         if (it != m_Layers.end())
         {
             m_Layers.erase(it);
-            m_LayerInsert--;
+            m_LayerInsertIndex--;
         }
     }
 

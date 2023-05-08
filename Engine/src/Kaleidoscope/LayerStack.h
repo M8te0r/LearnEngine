@@ -23,7 +23,7 @@ namespace Kaleidoscope
 
     private:
         std::vector<Layer *> m_Layers;
-        std::vector<Layer *>::iterator m_LayerInsert; // 记录layer数组的插入位置
+        unsigned int m_LayerInsertIndex = 0; // 记录layer数组的插入位置
     };
 
 } // namespace Kaleidoscope

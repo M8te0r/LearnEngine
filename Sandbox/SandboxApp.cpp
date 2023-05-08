@@ -36,7 +36,6 @@ public:
     Sandbox()
     {
         PushLayer(new ExampleLayer());
-        PushOverlay(new Kaleidoscope::ImGuiLayer());
     }
     ~Sandbox()
     {
