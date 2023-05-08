@@ -1,10 +1,14 @@
 #pragma once
 
 #ifdef KLD_PLATFORM_WINDOWS
+#ifdef KLD_DYNAMIC_LINK
 #ifdef KLD_BUILD_DLL
 #define KLD_API ___declspec(dllexport)
 #else
 #define KLD_API ___declspec(dllimport)
+#endif
+#else
+#define KLD_API
 #endif
 
 #endif

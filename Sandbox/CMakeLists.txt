@@ -24,4 +24,5 @@ target_include_directories(
     PRIVATE
     # ${app_root_dir}
     ${engine_root_dir}/src
+    ${engine_root_dir}/vendor/imgui
     )

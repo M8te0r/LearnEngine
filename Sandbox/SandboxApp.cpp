@@ -1,5 +1,6 @@
 
 #include "Engine.h"
+#include "imgui.h"
 
 class ExampleLayer : public Kaleidoscope::Layer
 {
@@ -27,6 +28,13 @@ public:
             }
             KLD_TRACE("{0}", (char)e.GetKeyCode());
         }
+    }
+
+    virtual void OnImGuiRender() override
+    {
+        ImGui::Begin("Test");
+        ImGui::Text("Hello World");
+        ImGui::End();
     }
 };
 

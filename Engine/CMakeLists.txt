@@ -8,7 +8,7 @@ find_package(OpenGL REQUIRED)
 
 
 add_subdirectory(vendor)
-add_library(${LIB_NAME} SHARED ${engine_head_files} ${engine_source_files})
+add_library(${LIB_NAME} STATIC ${engine_head_files} ${engine_source_files})
 
 
 message(test ${spdlog_include_dir})
@@ -37,9 +37,10 @@ target_precompile_headers(
 target_compile_definitions(
     ${LIB_NAME}  
     PRIVATE
-    "GLFW_INCLUDE_NONE"
-    # 因为macos没有dllexport方法，动态库一旦生成，无法通过sandbox中的宏改变动态库的信息。所以在生成动态库时就需要定义好宏
+     # 因为macos没有dllexport方法，动态库一旦生成，无法通过sandbox中的宏改变动态库的信息。所以在生成动态库时就需要定义好宏
     "KLD_PLATFORM_MACOS"
+    "GLFW_INCLUDE_NONE"
+    
     )
 
 

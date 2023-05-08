@@ -1,5 +1,6 @@
 #pragma once
 #include "Kaleidoscope/Window.h"
+#include "Kaleidoscope/Renderer/GraphicsContext.h"
 
 // GLFW和glad共用时需要启用（定义在cmake里）
 // #define GLFW_INCLUDE_NONE
@@ -31,6 +32,7 @@ namespace Kaleidoscope
 
     private:
         GLFWwindow *m_Window;
+        GraphicsContext *m_Context;
         struct WindowData
         {
             std::string Title;

@@ -4,8 +4,7 @@
 #include "Kaleidoscope/Events/ApplicationEvent.h"
 #include "Kaleidoscope/Events/MouseEvent.h"
 #include "Kaleidoscope/Events/KeyEvent.h"
-
-#include "glad/glad.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Kaleidoscope
 {
@@ -52,14 +51,14 @@ namespace Kaleidoscope
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // Required on Mac
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);         // Required on Mac
 
         m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
-        glfwMakeContextCurrent(m_Window);
-        // 使用glad载入所有opengl函数指针
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        KLD_CORE_ASSERT(status, "Failed to initialize Glad!");
+        // 初始化上下文
+        m_Context = new OpenGLContext(m_Window);
+        m_Context->Init();
+
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
 
@@ -154,7 +153,7 @@ namespace Kaleidoscope
     void MacWindow::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
+        m_Context->SwapBuffers();
     }
 
     void MacWindow::SetVSync(bool enabled)
