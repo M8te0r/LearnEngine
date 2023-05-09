@@ -2,12 +2,13 @@
 
 #include "Kaleidoscope/Core.h"
 
-
 #include "Kaleidoscope/Window.h"
 #include "Kaleidoscope/LayerStack.h"
 #include "Kaleidoscope/Events/Event.h"
 #include "Kaleidoscope/Events/ApplicationEvent.h"
+
 #include "Kaleidoscope/ImGui/ImGuiLayer.h"
+#include "Kaleidoscope/Renderer/Shader.h"
 
 namespace Kaleidoscope
 {
@@ -29,9 +30,12 @@ namespace Kaleidoscope
     private:
         bool OnWindowClose(WindowCloseEvent &e);
         std::unique_ptr<Window> m_Window;
-        ImGuiLayer* m_ImGuiLayer;
+        ImGuiLayer *m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
+
+        unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+        std::unique_ptr<Shader> m_Shader;
 
     private:
         static Application *s_Instance;

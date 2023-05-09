@@ -23,6 +23,9 @@ option(GLFW_BUILD_DOCS "" OFF)
 option(GLFW_INSTALL "" OFF)
 add_subdirectory(glfw)
 
+# OpenGL
+find_package(OpenGL REQUIRED)
+
 # glm
 add_subdirectory(glm)
 
@@ -34,9 +37,9 @@ file(GLOB_RECURSE glad_headers  "${CMAKE_CURRENT_SOURCE_DIR}/glad/*.h")
 file(GLOB_RECURSE glad_sources  "${CMAKE_CURRENT_SOURCE_DIR}/glad/*.c")
 add_library(glad STATIC ${glad_headers} ${glad_sources})
 target_include_directories(glad PUBLIC ${glad_src_dir} ${glad_include_dir})
+target_link_libraries(glad PRIVATE ${OPENGL_LIBRARIES})
 
-# OpenGL
-find_package(OpenGL REQUIRED)
+
 
 # imgui
 set(imgui_root_dir ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
