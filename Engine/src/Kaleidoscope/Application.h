@@ -7,6 +7,8 @@
 #include "Kaleidoscope/Events/Event.h"
 #include "Kaleidoscope/Events/ApplicationEvent.h"
 
+#include "Kaleidoscope/Core/Timestep.h"
+
 #include "Kaleidoscope/ImGui/ImGuiLayer.h"
 
 namespace Kaleidoscope
@@ -28,10 +30,13 @@ namespace Kaleidoscope
 
     private:
         bool OnWindowClose(WindowCloseEvent &e);
+
+    private:
         std::unique_ptr<Window> m_Window;
         ImGuiLayer *m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
+        float m_LastFrameTime = 0.0f;
 
     private:
         static Application *s_Instance;

@@ -7,6 +7,8 @@
 
 #include "Kaleidoscope/Input.h"
 
+#include "GLFW/glfw3.h"
+
 namespace Kaleidoscope
 {
 
@@ -21,6 +23,7 @@ namespace Kaleidoscope
         s_Instance = this;
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+        // m_Window->SetVSync(false);
 
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
@@ -64,10 +67,14 @@ namespace Kaleidoscope
     {
         while (m_Running)
         {
+            float time = (float)glfwGetTime(); // 使用平台对应的获取时间函数
+            Timestep timestep = time - m_LastFrameTime;
+            m_LastFrameTime = time;
+
             // 逐个更新layer
             for (Layer *layer : m_LayerStack)
             {
-                layer->OnUpdate();
+                layer->OnUpdate(timestep);
             }
 
             m_ImGuiLayer->Begin();

@@ -124,33 +124,34 @@ public:
         m_BlueShader.reset(new Kaleidoscope::Shader(blueShaderVertexSrc, blueShaderFragmentSrc));
     }
 
-    void OnUpdate() override
+    void OnUpdate(Kaleidoscope::Timestep ts) override
     {
+        KLD_TRACE("Delta time {0}s {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
         if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_LEFT))
         {
-            m_CameraPosition.x -= m_CameraMoveSpeed;
+            m_CameraPosition.x -= m_CameraMoveSpeed * ts;
         }
         else if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_RIGHT))
         {
-            m_CameraPosition.x += m_CameraMoveSpeed;
+            m_CameraPosition.x += m_CameraMoveSpeed * ts;
         }
 
         if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_UP))
         {
-            m_CameraPosition.y += m_CameraMoveSpeed;
+            m_CameraPosition.y += m_CameraMoveSpeed * ts;
         }
         else if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_DOWN))
         {
-            m_CameraPosition.y -= m_CameraMoveSpeed;
+            m_CameraPosition.y -= m_CameraMoveSpeed * ts;
         }
 
         if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_A))
         {
-            m_CameraRotation += m_CameraRotationSpeed;
+            m_CameraRotation += m_CameraRotationSpeed * ts;
         }
         else if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_D))
         {
-            m_CameraRotation -= m_CameraRotationSpeed;
+            m_CameraRotation -= m_CameraRotationSpeed * ts;
         }
 
         Kaleidoscope::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
@@ -186,9 +187,9 @@ private:
 
     Kaleidoscope::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;
-    float m_CameraMoveSpeed = 0.1f;
+    float m_CameraMoveSpeed = 5.0f; // 5 unit per second
     float m_CameraRotation = 0.0f;
-    float m_CameraRotationSpeed = 2.0f;
+    float m_CameraRotationSpeed = 180.0f; // 180 degree per second
 };
 
 class Sandbox : public Kaleidoscope::Application

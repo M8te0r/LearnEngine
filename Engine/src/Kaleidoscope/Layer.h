@@ -1,5 +1,6 @@
 #pragma once
 #include "Kaleidoscope/Core.h"
+#include "Kaleidoscope/Core/Timestep.h"
 #include "Kaleidoscope/Events/Event.h"
 
 namespace Kaleidoscope
@@ -12,8 +13,8 @@ namespace Kaleidoscope
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate() {}
-        virtual void OnImGuiRender(){}
+        virtual void OnUpdate(Timestep ts) {}
+        virtual void OnImGuiRender() {}
         virtual void OnEvent(Event &event) {}
 
         inline const std::string &GetName() const { return m_DebugName; }

@@ -7,6 +7,9 @@
 #include "Kaleidoscope/Application.h"
 #include "Kaleidoscope/Layer.h"
 #include "Kaleidoscope/Log.h"
+
+#include "Kaleidoscope/Core/Timestep.h"
+
 #include "Kaleidoscope/Input.h"
 #include "Kaleidoscope/KeyCodes.h"
 #include "Kaleidoscope/ImGui/ImGuiLayer.h"
