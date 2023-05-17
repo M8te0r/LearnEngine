@@ -5,6 +5,10 @@
 
 namespace Kaleidoscope
 {
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    // FIXME 事件系统，参考《设计模式》 https://zhuanlan.zhihu.com/p/535574136
+    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
     // Event种类
     enum class EventType
     {
@@ -68,8 +72,6 @@ namespace Kaleidoscope
             return GetCategoryFlags() & category;
         }
     };
-
-    /// @brief event派遣类，
 
     class EventDispatcher
     {
