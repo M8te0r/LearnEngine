@@ -8,10 +8,6 @@
 #include "Kaleidoscope/Events/ApplicationEvent.h"
 
 #include "Kaleidoscope/ImGui/ImGuiLayer.h"
-#include "Kaleidoscope/Renderer/Shader.h"
-#include "Kaleidoscope/Renderer/Buffer.h"
-#include "Kaleidoscope/Renderer/VertexArray.h"
-#include "Kaleidoscope/Renderer/OrthographicCamera.h"
 
 namespace Kaleidoscope
 {
@@ -36,14 +32,6 @@ namespace Kaleidoscope
         ImGuiLayer *m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
-
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<VertexArray> m_VertexArray;
-
-        std::shared_ptr<Shader> m_BlueShader;
-        std::shared_ptr<VertexArray> m_SquareVA;
-
-        OrthographicCamera m_Camera;
 
     private:
         static Application *s_Instance;
