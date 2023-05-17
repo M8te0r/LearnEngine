@@ -25,4 +25,6 @@ target_include_directories(
     # ${app_root_dir}
     ${engine_root_dir}/src
     ${engine_root_dir}/vendor/imgui
+    ${engine_root_dir}/vendor/glm
+
     )

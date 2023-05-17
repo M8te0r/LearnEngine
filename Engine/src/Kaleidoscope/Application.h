@@ -11,6 +11,7 @@
 #include "Kaleidoscope/Renderer/Shader.h"
 #include "Kaleidoscope/Renderer/Buffer.h"
 #include "Kaleidoscope/Renderer/VertexArray.h"
+#include "Kaleidoscope/Renderer/OrthographicCamera.h"
 
 namespace Kaleidoscope
 {
@@ -41,6 +42,8 @@ namespace Kaleidoscope
 
         std::shared_ptr<Shader> m_BlueShader;
         std::shared_ptr<VertexArray> m_SquareVA;
+
+        OrthographicCamera m_Camera;
 
     private:
         static Application *s_Instance;
