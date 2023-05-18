@@ -20,7 +20,7 @@
 
 #include "Kaleidoscope/Renderer/Buffer.h"
 #include "Kaleidoscope/Renderer/Shader.h"
-#include "kaleidoscope/Renderer/VertexArray.h"
+#include "Kaleidoscope/Renderer/VertexArray.h"
 
 #include "Kaleidoscope/Renderer/OrthographicCamera.h"
 // = = = = = = = = = = = = = = = = = = = = =
