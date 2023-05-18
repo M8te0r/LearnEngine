@@ -24,7 +24,7 @@ public:
             0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
             0.0f, 0.5f, 0.0f, 0.8f, 0.7f, 0.2f, 1.0f};
 
-        std::shared_ptr<Kaleidoscope::VertexBuffer> vertexBuffer;
+        Kaleidoscope::Ref<Kaleidoscope::VertexBuffer> vertexBuffer;
         // 等价于m_VertexBuffer buffer = VertexBuffer::Create(sizeof(vertices), vertices);
         vertexBuffer.reset(Kaleidoscope::VertexBuffer::Create(vertices, sizeof(vertices)));
         Kaleidoscope::BufferLayout layout = {
@@ -37,7 +37,7 @@ public:
 
         // 创建、绑定indexBuffer(同时将其添加至VertexArray中)
         uint32_t indices[3] = {0, 1, 2};
-        std::shared_ptr<Kaleidoscope::IndexBuffer> indexBuffer;
+        Kaleidoscope::Ref<Kaleidoscope::IndexBuffer> indexBuffer;
 
         indexBuffer.reset(Kaleidoscope::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
         m_VertexArray->SetIndexBuffer(indexBuffer);
@@ -49,14 +49,14 @@ public:
             0.5f, -0.5f, 0.0f,
             0.5f, 0.5f, 0.0f,
             -0.5f, 0.5f, 0.0f};
-        std::shared_ptr<Kaleidoscope::VertexBuffer> squareVB;
+        Kaleidoscope::Ref<Kaleidoscope::VertexBuffer> squareVB;
         squareVB.reset(Kaleidoscope::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
         squareVB->SetLayout({{Kaleidoscope::ShaderDataType::Float3, "a_Position"}});
         m_SquareVA->AddVertexBuffer(squareVB);
 
         // 创建、绑定indexBuffer(同时将其添加至VertexArray中)
         uint32_t squareIndices[6] = {0, 1, 2, 2, 3, 0};
-        std::shared_ptr<Kaleidoscope::IndexBuffer> squareIB;
+        Kaleidoscope::Ref<Kaleidoscope::IndexBuffer> squareIB;
         squareIB.reset(Kaleidoscope::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
         m_SquareVA->SetIndexBuffer(squareIB);
         // m_SquareVA->SetIndexBuffer(m_IndexBuffer);
@@ -206,11 +206,11 @@ public:
     }
 
 private:
-    std::shared_ptr<Kaleidoscope::Shader> m_Shader;
-    std::shared_ptr<Kaleidoscope::VertexArray> m_VertexArray;
+    Kaleidoscope::Ref<Kaleidoscope::Shader> m_Shader;
+    Kaleidoscope::Ref<Kaleidoscope::VertexArray> m_VertexArray;
 
-    std::shared_ptr<Kaleidoscope::Shader> m_FlatColorShader;
-    std::shared_ptr<Kaleidoscope::VertexArray> m_SquareVA;
+    Kaleidoscope::Ref<Kaleidoscope::Shader> m_FlatColorShader;
+    Kaleidoscope::Ref<Kaleidoscope::VertexArray> m_SquareVA;
 
     Kaleidoscope::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;

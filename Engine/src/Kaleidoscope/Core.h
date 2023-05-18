@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef KLD_PLATFORM_WINDOWS
 #ifdef KLD_DYNAMIC_LINK
 #ifdef KLD_BUILD_DLL
@@ -44,3 +46,12 @@
 #define BIT(x) (1 << x)
 
 #define KLD_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace Kaleidoscope
+{
+    template <typename T>
+    using Scope = std::unique_ptr<T>;
+
+    template <typename T>
+    using Ref = std::shared_ptr<T>;
+} // namespace Kaleidoscope
