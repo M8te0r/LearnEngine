@@ -31,7 +31,7 @@ namespace Kaleidoscope
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-
+        glBindTexture(GL_TEXTURE_2D, 0);
         stbi_image_free(data);
     }
 
