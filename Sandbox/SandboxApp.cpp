@@ -44,14 +44,15 @@ public:
 
         // 渲染正方形
         m_SquareVA.reset(Kaleidoscope::VertexArray::Create());
-        float squareVertices[3 * 4] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.5f, 0.5f, 0.0f,
-            -0.5f, 0.5f, 0.0f};
+        float squareVertices[5 * 4] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f};
         Kaleidoscope::Ref<Kaleidoscope::VertexBuffer> squareVB;
         squareVB.reset(Kaleidoscope::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
-        squareVB->SetLayout({{Kaleidoscope::ShaderDataType::Float3, "a_Position"}});
+        squareVB->SetLayout({{Kaleidoscope::ShaderDataType::Float3, "a_Position"},
+                             {Kaleidoscope::ShaderDataType::Float2, "a_TexCoord"}});
         m_SquareVA->AddVertexBuffer(squareVB);
 
         // 创建、绑定indexBuffer(同时将其添加至VertexArray中)
@@ -131,6 +132,44 @@ public:
         )";
 
         m_FlatColorShader.reset(Kaleidoscope::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+
+        std::string textureShaderVertexSrc = R"(
+            #version 330 core
+            
+            layout(location = 0) in vec3 a_Position;
+            layout(location = 1) in vec2 a_TexCoord;
+
+            uniform mat4 u_ViewProjection;
+            uniform mat4 u_Transform;
+
+            out vec2 v_TexCoord;
+
+            void main(){
+                v_TexCoord = a_TexCoord;
+                gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+            }
+        )";
+
+        std::string textureShaderFragmentSrc = R"(
+            #version 330 core
+            
+            layout(location = 0) out vec4  color;
+
+            in vec2 v_TexCoord ;
+
+            uniform sampler2D u_Texture;
+
+            void main(){
+                color =  texture(u_Texture,  v_TexCoord);
+            }
+        )";
+
+        m_TextureShader.reset(Kaleidoscope::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+
+        m_Texture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/Checkerboard.png");
+
+        std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(m_TextureShader)->Bind();
+        std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
     }
 
     void OnUpdate(Kaleidoscope::Timestep ts) override
@@ -189,7 +228,12 @@ public:
             }
         }
 
-        Kaleidoscope::Renderer::Submit(m_Shader, m_VertexArray);
+        m_Texture->Bind();
+
+        Kaleidoscope::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+        // Triangle
+        // Kaleidoscope::Renderer::Submit(m_Shader, m_VertexArray);
 
         Kaleidoscope::Renderer::EndScene();
     }
@@ -209,8 +253,10 @@ private:
     Kaleidoscope::Ref<Kaleidoscope::Shader> m_Shader;
     Kaleidoscope::Ref<Kaleidoscope::VertexArray> m_VertexArray;
 
-    Kaleidoscope::Ref<Kaleidoscope::Shader> m_FlatColorShader;
+    Kaleidoscope::Ref<Kaleidoscope::Shader> m_FlatColorShader, m_TextureShader;
     Kaleidoscope::Ref<Kaleidoscope::VertexArray> m_SquareVA;
+
+    Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_Texture;
 
     Kaleidoscope::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;

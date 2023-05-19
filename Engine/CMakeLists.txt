@@ -54,5 +54,6 @@ target_link_libraries(
     OpenGL::GL
     glad
     imgui
+    stb_image
 )
 
