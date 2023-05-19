@@ -101,6 +101,7 @@ public:
         // 等价于m_Shader=std::make_unique<Shader>();
         m_Shader.reset(Kaleidoscope::Shader::Create(vertexSrc, fragmentSrc));
 
+
         std::string flatColorShaderVertexSrc = R"(
             #version 330 core
             
@@ -133,40 +134,11 @@ public:
 
         m_FlatColorShader.reset(Kaleidoscope::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
 
-        std::string textureShaderVertexSrc = R"(
-            #version 330 core
-            
-            layout(location = 0) in vec3 a_Position;
-            layout(location = 1) in vec2 a_TexCoord;
+        m_TextureShader.reset(Kaleidoscope::Shader::Create("../Sandbox/assets/shaders/Texture.glsl"));
 
-            uniform mat4 u_ViewProjection;
-            uniform mat4 u_Transform;
-
-            out vec2 v_TexCoord;
-
-            void main(){
-                v_TexCoord = a_TexCoord;
-                gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-            }
-        )";
-
-        std::string textureShaderFragmentSrc = R"(
-            #version 330 core
-            
-            layout(location = 0) out vec4  color;
-
-            in vec2 v_TexCoord ;
-
-            uniform sampler2D u_Texture;
-
-            void main(){
-                color =  texture(u_Texture,  v_TexCoord);
-            }
-        )";
-
-        m_TextureShader.reset(Kaleidoscope::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
-
-        m_Texture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/Checkerboard.png");
+        m_Texture = Kaleidoscope::Texture2D::Create("/Users/crystalized/cpp_project/LearnEngine/Sandbox/assets/textures/Checkerboard.png");
+        // m_Texture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/ChernoLogo.png");
+        m_LogoTexture = Kaleidoscope::Texture2D::Create("/Users/crystalized/cpp_project/LearnEngine/Sandbox/assets/textures/ChernoLogo.png");
 
         std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(m_TextureShader)->Bind();
         std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -174,7 +146,7 @@ public:
 
     void OnUpdate(Kaleidoscope::Timestep ts) override
     {
-        KLD_TRACE("Delta time {0}s {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
+        // KLD_TRACE("Delta time {0}s {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
 
         if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_LEFT))
         {
@@ -229,7 +201,9 @@ public:
         }
 
         m_Texture->Bind();
+        Kaleidoscope::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
+        m_LogoTexture->Bind();
         Kaleidoscope::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         // Triangle
@@ -256,7 +230,7 @@ private:
     Kaleidoscope::Ref<Kaleidoscope::Shader> m_FlatColorShader, m_TextureShader;
     Kaleidoscope::Ref<Kaleidoscope::VertexArray> m_SquareVA;
 
-    Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_Texture;
+    Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_Texture, m_LogoTexture;
 
     Kaleidoscope::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;
