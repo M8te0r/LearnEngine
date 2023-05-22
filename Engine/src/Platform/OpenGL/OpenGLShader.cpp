@@ -24,9 +24,24 @@ namespace Kaleidoscope
         std::string source = ReadFile(filepath);
         auto shaderSources = Preprocess(source);
         Compile(shaderSources);
+
+        // 从文件的路径中提取文件名
+        // 找最后一个斜杠
+        // assets/shaders/Texture. glsl
+        auto lastSlash = filepath.find_last_of("/\\");
+        // 如果是没有斜杠，即文件就在目录下Texture.glsl
+        lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+
+        // 找最后一个点
+        auto lastDot = filepath.rfind('.');
+
+        // 获取文件名
+        auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+        m_Name = filepath.substr(lastSlash, count);
     }
 
-    OpenGLShader::OpenGLShader(const std::string &vertexSrc, const std::string &fragmentSrc)
+    OpenGLShader::OpenGLShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc)
+        : m_Name(name)
     {
         std::unordered_map<GLenum, std::string> sources;
         sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -83,7 +98,15 @@ namespace Kaleidoscope
     void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string> &shaderSources)
     {
         GLuint program = glCreateProgram();
-        std::vector<GLenum> glShaderIDs(shaderSources.size());
+
+        KLD_CORE_ASSERT(shaderSource.size() <= 2, "We only support 2 shaders for now!");
+        std::array<GLenum, 2> glShaderIDs;
+        int glShadersIDIndex = 0;
+
+        // https://blog.csdn.net/hl_zzl/article/details/84944494
+        // reserve的作用是更改vector的容量（capacity），使vector至少可以容纳n个元素。
+        // 如果使用动态初始化，即std::vector<GLenum> glShaderIDs(shaderSources.size())，verctor会额外分配2个空内存占位
+        // 且应为std::vector是采用堆内存分配机制的，性能不及栈内存分配机制的std::array
 
         for (auto &kv : shaderSources)
         {
@@ -122,7 +145,7 @@ namespace Kaleidoscope
 
             // Attach our shaders to our program
             glAttachShader(program, shader);
-            glShaderIDs.push_back(shader);
+            glShaderIDs[glShadersIDIndex++] = shader;
         }
 
         // Vertex and fragment shaders are successfully compiled.
