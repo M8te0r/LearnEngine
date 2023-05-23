@@ -1,12 +1,17 @@
 
 #include "Engine.h"
 
+#include "Kaleidoscope/Core/EntryPoint.h"
+
+
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include "imgui.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Kaleidoscope::Layer
 {
@@ -15,7 +20,7 @@ public:
         : Layer("Example"), m_CameraController(1280.0f / 720.f)
     {
         // 创建顶点数组
-        m_VertexArray.reset(Kaleidoscope::VertexArray::Create());
+        m_VertexArray = Kaleidoscope::VertexArray::Create();
 
         // 创建、绑定vertexBuffer(同时将其添加至VertexArray中)
         // 顶点数据（CPU中
@@ -43,7 +48,7 @@ public:
         m_VertexArray->SetIndexBuffer(indexBuffer);
 
         // 渲染正方形
-        m_SquareVA.reset(Kaleidoscope::VertexArray::Create());
+        m_SquareVA = Kaleidoscope::VertexArray::Create();
         float squareVertices[5 * 4] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
@@ -196,7 +201,6 @@ public:
     void OnEvent(Kaleidoscope::Event &e) override
     {
         m_CameraController.OnEvent(e);
-
     }
 
 private:
@@ -219,7 +223,8 @@ class Sandbox : public Kaleidoscope::Application
 public:
     Sandbox()
     {
-        PushLayer(new ExampleLayer());
+        // PushLayer(new ExampleLayer());
+        PushLayer(new Sandbox2D());
     }
     ~Sandbox()
     {

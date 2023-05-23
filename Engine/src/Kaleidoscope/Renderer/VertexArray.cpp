@@ -6,7 +6,7 @@
 
 namespace Kaleidoscope
 {
-    VertexArray *VertexArray::Create()
+    Ref<VertexArray> VertexArray::Create()
     {
         switch (Renderer::GetAPI())
         {
@@ -16,7 +16,7 @@ namespace Kaleidoscope
 
         case RendererAPI::API::OpenGL:
 
-            return new OpenGLVertexArray();
+            return std::make_shared<OpenGLVertexArray>();
         }
         KLD_CORE_ASSERT(false, "Unknown renderer API!");
         return nullptr;

@@ -12,7 +12,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(app_root_dir ${CMAKE_CURRENT_SOURCE_DIR})
 # set(3rd_root_dir ${app_root_dir}/3rdparty)
 set(engine_root_dir ${app_root_dir}/Engine)
-set(editor_root_dir ${app_root_dir}/Sandbox)
+set(sandbox_root_dir ${app_root_dir}/Sandbox)
 
 add_subdirectory(Engine)
 add_subdirectory(Sandbox)

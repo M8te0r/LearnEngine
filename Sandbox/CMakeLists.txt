@@ -1,6 +1,6 @@
 set(TARGET_NAME ${PROJECT_NAME})
 
-add_executable(${TARGET_NAME} SandboxApp.cpp)
+add_executable(${TARGET_NAME} SandboxApp.cpp Sandbox2D.cpp)
 # add_dependencies(${TARGET_NAME}  Engine)
 
 target_link_libraries(${TARGET_NAME}  Engine)
@@ -22,6 +22,7 @@ target_precompile_headers(
 target_include_directories(
     ${TARGET_NAME} 
     PRIVATE
+    ${sandbox_root_dir}
     # ${app_root_dir}
     ${engine_root_dir}/src
     ${engine_root_dir}/vendor/imgui

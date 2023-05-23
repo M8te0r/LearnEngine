@@ -31,4 +31,3 @@
 // = = = = = = = = = = = = = = = = = = = = =
 
 // 入口
-#include "Kaleidoscope/Core/EntryPoint.h"
