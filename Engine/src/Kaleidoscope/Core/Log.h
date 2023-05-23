@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-#include "Kaleidoscope/Core.h"
+#include "Kaleidoscope/Core/Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 

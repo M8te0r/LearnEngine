@@ -4,17 +4,18 @@
 #define KLD_PLATFORM_MACOS
 
 // 用于Sandbox测试引用的头文件
-#include "Kaleidoscope/Application.h"
-#include "Kaleidoscope/Layer.h"
-#include "Kaleidoscope/Log.h"
+#include "Kaleidoscope/Core/Application.h"
+#include "Kaleidoscope/Core/Layer.h"
+#include "Kaleidoscope/Core/Log.h"
 
 #include "Kaleidoscope/Core/Timestep.h"
 
-#include "Kaleidoscope/Input.h"
-#include "Kaleidoscope/KeyCodes.h"
-#include "Kaleidoscope/ImGui/ImGuiLayer.h"
-#include "Kaleidoscope/OrthographicCameraController.h"
+#include "Kaleidoscope/Core/Input.h"
+#include "Kaleidoscope/Core/KeyCodes.h"
+#include "Kaleidoscope/Core/MouseButtonCodes.h"
+#include "Kaleidoscope/Renderer/OrthographicCameraController.h"
 
+#include "Kaleidoscope/ImGui/ImGuiLayer.h"
 
 // = = = = = = = Renderer相关 = = = = = = =
 #include "Kaleidoscope/Renderer/Renderer.h"
@@ -30,4 +31,4 @@
 // = = = = = = = = = = = = = = = = = = = = =
 
 // 入口
-#include "Kaleidoscope/EntryPoint.h"
+#include "Kaleidoscope/Core/EntryPoint.h"

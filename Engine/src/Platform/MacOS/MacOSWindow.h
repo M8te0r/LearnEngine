@@ -1,5 +1,5 @@
 #pragma once
-#include "Kaleidoscope/Window.h"
+#include "Kaleidoscope/Core/Window.h"
 #include "Kaleidoscope/Renderer/GraphicsContext.h"
 
 // GLFW和glad共用时需要启用（定义在cmake里）

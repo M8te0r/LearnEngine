@@ -2,7 +2,7 @@
 #include "Platform/MacOS/MacOSInput.h"
 
 #include "GLFW/glfw3.h"
-#include "Kaleidoscope/Application.h"
+#include "Kaleidoscope/Core/Application.h"
 namespace Kaleidoscope
 {
     Input *Input::s_Instance = new MacOSInput();

@@ -1,5 +1,5 @@
 #pragma once
-#include "Kaleidoscope/Layer.h"
+#include "Kaleidoscope/Core/Layer.h"
 
 #include "Kaleidoscope/Events/KeyEvent.h"
 #include "Kaleidoscope/Events/MouseEvent.h"

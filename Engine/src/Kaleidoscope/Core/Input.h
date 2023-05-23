@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Kaleidoscope/Core.h"
+#include "Kaleidoscope/Core/Core.h"
 namespace Kaleidoscope
 {
     class Input

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Kaleidoscope/Core.h"
+#include "Kaleidoscope/Core/Core.h"
 
 namespace Kaleidoscope
 {

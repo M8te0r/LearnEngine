@@ -1,8 +1,8 @@
 #include "kldpch.h"
-#include "Kaleidoscope/OrthographicCameraController.h"
+#include "Kaleidoscope/Renderer/OrthographicCameraController.h"
 
-#include "Kaleidoscope/Input.h"
-#include "Kaleidoscope/KeyCodes.h"
+#include "Kaleidoscope/Core/Input.h"
+#include "Kaleidoscope/Core/KeyCodes.h"
 
 namespace Kaleidoscope
 {

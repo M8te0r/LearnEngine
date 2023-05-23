@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Kaleidoscope/Log.h"
+#include "Kaleidoscope/Core/Log.h"
 
 #ifdef KLD_PLATFORM_WINDOWS
 #include <Windows.h>

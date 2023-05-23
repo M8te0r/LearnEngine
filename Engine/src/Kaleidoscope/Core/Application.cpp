@@ -1,11 +1,11 @@
 #include "kldpch.h"
-#include "Kaleidoscope/Application.h"
+#include "Kaleidoscope/Core/Application.h"
 
-#include "Kaleidoscope/Log.h"
+#include "Kaleidoscope/Core/Log.h"
 
 #include "Kaleidoscope/Renderer/Renderer.h"
 
-#include "Kaleidoscope/Input.h"
+#include "Kaleidoscope/Core/Input.h"
 
 #include "GLFW/glfw3.h"
 
