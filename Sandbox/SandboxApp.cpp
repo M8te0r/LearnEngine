@@ -12,7 +12,7 @@ class ExampleLayer : public Kaleidoscope::Layer
 {
 public:
     ExampleLayer()
-        : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+        : Layer("Example"), m_CameraController(1280.0f / 720.f)
     {
         // 创建顶点数组
         m_VertexArray.reset(Kaleidoscope::VertexArray::Create());
@@ -147,41 +147,14 @@ public:
     {
         // KLD_TRACE("Delta time {0}s {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
 
-        if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_LEFT))
-        {
-            m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-        }
-        else if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_RIGHT))
-        {
-            m_CameraPosition.x += m_CameraMoveSpeed * ts;
-        }
+        // Update
+        m_CameraController.OnUpdate(ts);
 
-        if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_UP))
-        {
-            m_CameraPosition.y += m_CameraMoveSpeed * ts;
-        }
-        else if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_DOWN))
-        {
-            m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-        }
-
-        if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_A))
-        {
-            m_CameraRotation += m_CameraRotationSpeed * ts;
-        }
-        else if (Kaleidoscope::Input::IsKeyPressed(KLD_KEY_D))
-        {
-            m_CameraRotation -= m_CameraRotationSpeed * ts;
-        }
-
+        // Render
         Kaleidoscope::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
         Kaleidoscope::RenderCommand::Clear();
 
-        // m_Camera.SetPostion();
-        m_Camera.SetPosition(m_CameraPosition);
-        m_Camera.SetRotation(m_CameraRotation);
-
-        Kaleidoscope::Renderer::BeginScene(m_Camera);
+        Kaleidoscope::Renderer::BeginScene(m_CameraController.GetCamera());
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f)); // 因为不需要一直计算，所以可以定义为static或者设置为成员变量，从而优化性能
 
@@ -220,8 +193,9 @@ public:
         ImGui::End();
     }
 
-    void OnEvent(Kaleidoscope::Event &event) override
+    void OnEvent(Kaleidoscope::Event &e) override
     {
+        m_CameraController.OnEvent(e);
     }
 
 private:
@@ -234,12 +208,7 @@ private:
 
     Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_Texture, m_LogoTexture;
 
-    Kaleidoscope::OrthographicCamera m_Camera;
-    glm::vec3 m_CameraPosition;
-    float m_CameraMoveSpeed = 5.0f; // 5 unit per second(VSync off)
-
-    float m_CameraRotation = 0.0f;
-    float m_CameraRotationSpeed = 180.0f; // 180 degree per second(VSync off)
+    Kaleidoscope::OrthographicCameraController m_CameraController;
 
     glm::vec3 m_SquareColor = {0.2f, 0.3f, 0.8f};
 };

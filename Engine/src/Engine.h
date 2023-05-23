@@ -13,6 +13,8 @@
 #include "Kaleidoscope/Input.h"
 #include "Kaleidoscope/KeyCodes.h"
 #include "Kaleidoscope/ImGui/ImGuiLayer.h"
+#include "Kaleidoscope/OrthographicCameraController.h"
+
 
 // = = = = = = = Renderer相关 = = = = = = =
 #include "Kaleidoscope/Renderer/Renderer.h"
