@@ -19,6 +19,7 @@
 
 // = = = = = = = Renderer相关 = = = = = = =
 #include "Kaleidoscope/Renderer/Renderer.h"
+#include "Kaleidoscope/Renderer/Renderer2D.h"
 #include "Kaleidoscope/Renderer/RenderCommand.h"
 
 #include "Kaleidoscope/Renderer/Buffer.h"

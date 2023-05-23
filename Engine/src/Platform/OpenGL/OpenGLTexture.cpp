@@ -7,6 +7,7 @@
 namespace Kaleidoscope
 {
 
+    // TODO: 采用相对路径时，std_image无法正确读取纹理图片
     OpenGLTexture2D::OpenGLTexture2D(const std::string &path)
         : m_Path(path)
     {
@@ -39,7 +40,7 @@ namespace Kaleidoscope
 
         KLD_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
 
-        // TODO OpenGL 4.5 only
+        // FIXME OpenGL 4.5 only
         // glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         // glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
         // glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -66,7 +67,7 @@ namespace Kaleidoscope
     void OpenGLTexture2D::Bind(uint32_t slot) const
     {
 
-        // TODO OpenGL 4.5 only
+        // FIXME OpenGL 4.5 only
         // glBindTextureUnit(slot, m_RendererID);
 
         glActiveTexture(GL_TEXTURE0 + slot);

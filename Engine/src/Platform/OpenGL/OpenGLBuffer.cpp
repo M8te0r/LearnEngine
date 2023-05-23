@@ -10,7 +10,7 @@ namespace Kaleidoscope
     //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
     OpenGLVertexBuffer::OpenGLVertexBuffer(float *vertices, uint32_t size)
     {
-        // glCreateBuffers(1, &m_RendererID); OpenGL 4.5以上才支持
+        // FIXME glCreateBuffers(1, &m_RendererID); OpenGL 4.5以上才支持
         glGenBuffers(1, &m_RendererID);
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
         glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);

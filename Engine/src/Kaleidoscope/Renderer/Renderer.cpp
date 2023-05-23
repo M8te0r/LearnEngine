@@ -1,6 +1,7 @@
 #include "kldpch.h"
 #include "Kaleidoscope/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Kaleidoscope/Renderer/Renderer2D.h"
 
 namespace Kaleidoscope
 {
@@ -9,6 +10,7 @@ namespace Kaleidoscope
     void Renderer::Init()
     {
         RenderCommand::Init();
+        Renderer2D::Init();
     }
 
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -30,6 +32,7 @@ namespace Kaleidoscope
         shader->Bind();
         std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix); // 通常来说View和Projection矩阵不会频繁的变化
         std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);                              // 而Model矩阵则是变化最为频繁的
+
         vertexArray->Bind();
         RenderCommand::DrawIndexed(vertexArray);
     }
