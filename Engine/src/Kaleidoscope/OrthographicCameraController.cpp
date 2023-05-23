@@ -67,7 +67,7 @@ namespace Kaleidoscope
     bool OrthographicCameraController::OnWindowResized(WindowResizeEvent &e)
     {
 
-        // FIXME: 改变窗口大小的时候，画面不能正确显示
+        // FIXME: 改变窗口大小的时候，画面会变成原来的1/4(MacOS only)
         m_AspectRatio -= (float)e.GetWidth() / (float)e.GetHeight();
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
         return false;

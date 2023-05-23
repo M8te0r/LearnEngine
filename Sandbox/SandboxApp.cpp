@@ -196,6 +196,7 @@ public:
     void OnEvent(Kaleidoscope::Event &e) override
     {
         m_CameraController.OnEvent(e);
+
     }
 
 private:

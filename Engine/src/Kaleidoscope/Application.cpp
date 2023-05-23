@@ -52,6 +52,7 @@ namespace Kaleidoscope
         EventDispatcher dispatcher(e);
 
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
         // 从后向前执行layer的event
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
@@ -73,10 +74,13 @@ namespace Kaleidoscope
             Timestep timestep = time - m_LastFrameTime;
             m_LastFrameTime = time;
 
-            // 逐个更新layer
-            for (Layer *layer : m_LayerStack)
+            // 逐个更新layer(最小化时窗口不渲染，但是imgui因为有docking功能，依旧保持渲染)
+            if (!m_Minimized)
             {
-                layer->OnUpdate(timestep);
+                for (Layer *layer : m_LayerStack)
+                {
+                    layer->OnUpdate(timestep);
+                }
             }
 
             m_ImGuiLayer->Begin();
@@ -93,6 +97,21 @@ namespace Kaleidoscope
     bool Application::OnWindowClose(WindowCloseEvent &e)
     {
         m_Running = false;
+        return true;
+    }
+
+    bool Application::OnWindowResize(WindowResizeEvent &e)
+    {
+
+        // 当最小化的时候停止渲染，节省资源
+        if (e.GetWidth() == 0 || e.GetHeight() == 0)
+        {
+            m_Minimized = true;
+            return false;
+        }
+        m_Minimized = false;
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
         return true;
     }
 
