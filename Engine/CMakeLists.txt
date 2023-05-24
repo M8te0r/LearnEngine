@@ -11,7 +11,6 @@ add_subdirectory(vendor)
 add_library(${LIB_NAME} STATIC ${engine_head_files} ${engine_source_files})
 
 
-message(test ${spdlog_include_dir})
 target_include_directories(
     ${LIB_NAME} 
     PRIVATE
