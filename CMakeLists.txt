@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 3.22)
 project(Kaleidoscope VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
+
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+message("CMAKE_CXX_COMPILER_ID： ${CMAKE_CXX_COMPILER_ID}")
+else()
 set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -Wall -Wformat")
+endif()
 # set(CMAKE_CXX_FLAGS "${CAMKE_CXX_FLAGS} -Wall -O3")
 
 # 可执行文件输出路径

@@ -3,9 +3,10 @@
 */.DS_Store
 
 # visual studio
-./vs
+.vs/
 
 # vscode ================================
+.vscode/
 ./vscode
 .vscode/*
 !.vscode/settings.json
