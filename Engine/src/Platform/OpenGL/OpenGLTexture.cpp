@@ -6,13 +6,13 @@
 namespace Kaleidoscope
 {
     OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
-        :m_Width(width), m_Height(height)
+        : m_Width(width), m_Height(height)
     {
         // 显卡上的存储格式，源图片的存储格式
         m_InternalFormat = GL_RGBA8;
         m_DataFormat = GL_RGBA;
 
-        // FIXME OpenGL 4.5 only
+        // FIXME OpenGL 4.5 above
         // glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         // glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
         // glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -22,14 +22,13 @@ namespace Kaleidoscope
         glGenTextures(1, &m_RendererID);
         glBindTexture(GL_TEXTURE_2D, m_RendererID);
 
-        //glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, nullptr);
+        // glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, nullptr);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
     }
 
     // TODO: 采用相对路径时，std_image无法正确读取纹理图片
@@ -52,6 +51,7 @@ namespace Kaleidoscope
         m_Height = height;
 
         GLenum internalFormat = 0, dataFormat = 0; // 显卡上的存储格式，源图片的存储格式
+
         if (channels == 4)
         {
             internalFormat = GL_RGBA8;
@@ -68,7 +68,7 @@ namespace Kaleidoscope
 
         KLD_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
 
-        // FIXME OpenGL 4.5 only
+        // FIXME OpenGL 4.5 above
         // glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         // glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
         // glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -78,14 +78,11 @@ namespace Kaleidoscope
         glGenTextures(1, &m_RendererID);
         glBindTexture(GL_TEXTURE_2D, m_RendererID);
 
-
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-
 
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -99,20 +96,19 @@ namespace Kaleidoscope
         glDeleteTextures(1, &m_RendererID);
     }
 
-    void OpenGLTexture2D::SetData(void* data, uint32_t size)
+    void OpenGLTexture2D::SetData(void *data, uint32_t size)
     {
-        uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3; //bytes per pixel
-        KLD_CORE_ASSERT(size==m_Width*m_Height*bpp,"Data must be entire texture!");
-        // OpenGL 4.5 above
+        uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3; // bpp: bytes per pixel
+        KLD_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
+        // FIXME OpenGL 4.5 above
         // glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
         glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, data);
-
     }
 
     void OpenGLTexture2D::Bind(uint32_t slot) const
     {
 
-        // FIXME OpenGL 4.5 only
+        // FIXME OpenGL 4.5 above
         // glBindTextureUnit(slot, m_RendererID);
 
         glActiveTexture(GL_TEXTURE0 + slot);
