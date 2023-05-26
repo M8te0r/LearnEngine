@@ -83,7 +83,7 @@ namespace Kaleidoscope
 
         // 使用color，则默认的u_Texture设置为(1,1,1,1)纯白，从而使fragment shader输出color的颜色
         s_Data->TextureShader->SetFloat4("u_Color", color); // 绑定color
-        s_Data->WhiteTexture->Bind();                       // 绑定纯白texture
+        s_Data->WhiteTexture->Bind();                       // 绑定纯白texture:
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
         s_Data->TextureShader->SetMat4("u_Transform", transform);
