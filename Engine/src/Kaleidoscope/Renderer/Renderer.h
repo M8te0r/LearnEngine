@@ -9,6 +9,7 @@ namespace Kaleidoscope
     {
     public:
         static void Init();
+        static void Shutdown();
         static void OnWindowResize(uint32_t width, uint32_t height);
         static void BeginScene(OrthographicCamera &camera);
         static void EndScene();
@@ -22,7 +23,7 @@ namespace Kaleidoscope
         {
             glm::mat4 ViewProjectionMatrix;
         };
-        static SceneData *m_SceneData;
+        static Scope<SceneData> s_SceneData;
     };
 
 } // namespace Kaleidoscope

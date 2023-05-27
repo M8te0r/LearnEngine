@@ -8,55 +8,65 @@
 
 namespace Kaleidoscope
 {
-    static bool s_GLFWInitialized = false;
+    static uint8_t s_GLFWWindowCount = 0;
 
     static void GLFWErrorCallback(int error, const char *description)
     {
         KLD_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
-    Window *Window::Create(const WindowProps &props)
+    Scope<Window> Window::Create(const WindowProps &props)
     {
-        return new MacWindow(props);
+        return CreateScope<MacOSWindow>(props);
     }
 
-    MacWindow::MacWindow(const WindowProps &props)
+    MacOSWindow::MacOSWindow(const WindowProps &props)
     {
+        KLD_PROFILE_FUNCTION();
+
         Init(props);
     }
 
-    MacWindow::~MacWindow()
+    MacOSWindow::~MacOSWindow()
     {
+        KLD_PROFILE_FUNCTION();
+
         Shutdown();
     }
 
-    void MacWindow::Init(const WindowProps &props)
+    void MacOSWindow::Init(const WindowProps &props)
     {
+        KLD_PROFILE_FUNCTION();
+
         m_Data.Title = props.Title;
         m_Data.Width = props.Width;
         m_Data.Height = props.Height;
 
         KLD_CORE_INFO("Creating Window {0} {1}, {2}", props.Title, props.Width, props.Height);
 
-        if (!s_GLFWInitialized)
+        if (s_GLFWWindowCount == 0)
         {
+            KLD_PROFILE_SCOPE("glfwInit");
             int success = glfwInit();
             KLD_CORE_ASSERT(success, "Could not initialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
-            s_GLFWInitialized = true;
         }
 
-        // GL 3.2 + GLSL 150
-        // const char *glsl_version = "#version 150";
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);         // Required on Mac
+        {
+            KLD_PROFILE_SCOPE("glfwCreateWindow");
+            // GL 3.2 + GLSL 150
+            // const char *glsl_version = "#version 150";
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);         // Required on Mac
 
-        m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+            m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+            ++s_GLFWWindowCount;
+        }
 
         // 初始化上下文
-        m_Context = new OpenGLContext(m_Window);
+        m_Context = GraphicsContext::Create(m_Window);
         m_Context->Init();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -145,19 +155,32 @@ namespace Kaleidoscope
             data.EventCallback(event); });
     }
 
-    void MacWindow::Shutdown()
+    void MacOSWindow::Shutdown()
     {
+        KLD_PROFILE_FUNCTION();
+
         glfwDestroyWindow(m_Window);
+        --s_GLFWWindowCount;
+
+        if (s_GLFWWindowCount == 0)
+        {
+            KLD_CORE_INFO("Terminating GLFW");
+            glfwTerminate();
+        }
     }
 
-    void MacWindow::OnUpdate()
+    void MacOSWindow::OnUpdate()
     {
+        KLD_PROFILE_FUNCTION();
+
         glfwPollEvents();
         m_Context->SwapBuffers();
     }
 
-    void MacWindow::SetVSync(bool enabled)
+    void MacOSWindow::SetVSync(bool enabled)
     {
+        KLD_PROFILE_FUNCTION();
+
         if (enabled)
         {
             glfwSwapInterval(1);
@@ -169,7 +192,7 @@ namespace Kaleidoscope
         m_Data.VSync = enabled;
     }
 
-    bool MacWindow::IsVSync() const
+    bool MacOSWindow::IsVSync() const
     {
         return m_Data.VSync;
     }

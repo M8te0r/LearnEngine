@@ -22,6 +22,8 @@ namespace Kaleidoscope
 
     void ImGuiLayer::OnAttach()
     {
+        KLD_PROFILE_FUNCTION();
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -56,6 +58,8 @@ namespace Kaleidoscope
 
     void ImGuiLayer::OnDetach()
     {
+        KLD_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -63,6 +67,8 @@ namespace Kaleidoscope
 
     void ImGuiLayer::Begin()
     {
+        KLD_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -70,6 +76,8 @@ namespace Kaleidoscope
 
     void ImGuiLayer::End()
     {
+        KLD_PROFILE_FUNCTION();
+
         ImGuiIO &io = ImGui::GetIO();
         Application &app = Application::Get();
 

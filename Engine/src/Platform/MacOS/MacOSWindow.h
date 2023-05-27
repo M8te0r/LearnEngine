@@ -8,11 +8,11 @@
 
 namespace Kaleidoscope
 {
-    class MacWindow : public Window
+    class MacOSWindow : public Window
     {
     public:
-        MacWindow(const WindowProps &props);
-        virtual ~MacWindow();
+        MacOSWindow(const WindowProps &props);
+        virtual ~MacOSWindow();
 
         void OnUpdate() override;
 
@@ -32,7 +32,7 @@ namespace Kaleidoscope
 
     private:
         GLFWwindow *m_Window;
-        GraphicsContext *m_Context;
+        Scope<GraphicsContext> m_Context;
         struct WindowData
         {
             std::string Title;

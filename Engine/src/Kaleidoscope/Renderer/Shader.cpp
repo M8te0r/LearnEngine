@@ -16,7 +16,7 @@ namespace Kaleidoscope
 
         case RendererAPI::API::OpenGL:
 
-            return std::make_shared<OpenGLShader>(filepath);
+            return CreateRef<OpenGLShader>(filepath);
         }
         KLD_CORE_ASSERT(false, "Unknown renderer API!");
         return nullptr;
@@ -32,7 +32,7 @@ namespace Kaleidoscope
 
         case RendererAPI::API::OpenGL:
 
-            return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+            return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
         }
         KLD_CORE_ASSERT(false, "Unknown renderer API!");
         return nullptr;

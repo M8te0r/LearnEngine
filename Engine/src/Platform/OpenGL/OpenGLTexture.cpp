@@ -8,6 +8,8 @@ namespace Kaleidoscope
     OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
         : m_Width(width), m_Height(height)
     {
+        KLD_PROFILE_FUNCTION();
+
         // 显卡上的存储格式，源图片的存储格式
         m_InternalFormat = GL_RGBA8;
         m_DataFormat = GL_RGBA;
@@ -35,9 +37,15 @@ namespace Kaleidoscope
     OpenGLTexture2D::OpenGLTexture2D(const std::string &path)
         : m_Path(path)
     {
+        KLD_PROFILE_FUNCTION();
+
         int width, height, channels;
         stbi_set_flip_vertically_on_load(1);
-        stbi_uc *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+        stbi_uc *data = nullptr;
+        {
+            KLD_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string &path)");
+            data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+        }
 
         // https://stackoverflow.com/questions/49462889/stbi-load-doesnt-return-any-value
         /*
@@ -93,11 +101,15 @@ namespace Kaleidoscope
 
     OpenGLTexture2D::~OpenGLTexture2D()
     {
+        KLD_PROFILE_FUNCTION();
+
         glDeleteTextures(1, &m_RendererID);
     }
 
     void OpenGLTexture2D::SetData(void *data, uint32_t size)
     {
+        KLD_PROFILE_FUNCTION();
+
         uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3; // bpp: bytes per pixel
         KLD_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
         // FIXME OpenGL 4.5 above
@@ -107,6 +119,7 @@ namespace Kaleidoscope
 
     void OpenGLTexture2D::Bind(uint32_t slot) const
     {
+        KLD_PROFILE_FUNCTION();
 
         // FIXME OpenGL 4.5 above
         // glBindTextureUnit(slot, m_RendererID);

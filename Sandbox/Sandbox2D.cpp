@@ -11,12 +11,15 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+    KLD_PROFILE_FUNCTION();
+
     // m_CheckerboardTexture = Kaleidoscope::Texture2D::Create("/Users/crystalized/cpp_project/LearnEngine/Sandbox/assets/textures/Checkerboard.png");
     m_CheckerboardTexture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::OnDetach()
 {
+    KLD_PROFILE_FUNCTION();
 }
 
 void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
@@ -24,10 +27,8 @@ void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
     KLD_PROFILE_FUNCTION();
 
     // Update
-    {
-        KLD_PROFILE_SCOPE("m_CameraController::OnUpdate");
-        m_CameraController.OnUpdate(ts);
-    }
+
+    m_CameraController.OnUpdate(ts);
 
     // Render
     {

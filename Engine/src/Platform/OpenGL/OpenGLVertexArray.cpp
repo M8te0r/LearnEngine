@@ -40,26 +40,36 @@ namespace Kaleidoscope
 
     OpenGLVertexArray::OpenGLVertexArray()
     {
+        KLD_PROFILE_FUNCTION();
+
         glGenVertexArrays(1, &m_RendererID);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
+        KLD_PROFILE_FUNCTION();
+
         glDeleteVertexArrays(1, &m_RendererID);
     }
 
     void OpenGLVertexArray::Bind() const
     {
+        KLD_PROFILE_FUNCTION();
+
         glBindVertexArray(m_RendererID);
     }
 
     void OpenGLVertexArray::UnBind() const
     {
+        KLD_PROFILE_FUNCTION();
+
         glBindVertexArray(0);
     }
 
     void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer)
     {
+        KLD_PROFILE_FUNCTION();
+
         // 设置好了buffer的layout（即bufferData）后，才能将其添加至vertexArray中
         KLD_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
@@ -85,6 +95,8 @@ namespace Kaleidoscope
 
     void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer> &indexBuffer)
     {
+        KLD_PROFILE_FUNCTION();
+
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();
 

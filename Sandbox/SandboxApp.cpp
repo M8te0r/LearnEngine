@@ -3,7 +3,6 @@
 
 #include "Kaleidoscope/Core/EntryPoint.h"
 
-
 #include "Platform/OpenGL/OpenGLShader.h"
 
 #include "imgui.h"
@@ -29,9 +28,9 @@ public:
             0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
             0.0f, 0.5f, 0.0f, 0.8f, 0.7f, 0.2f, 1.0f};
 
-        Kaleidoscope::Ref<Kaleidoscope::VertexBuffer> vertexBuffer;
         // 等价于m_VertexBuffer buffer = VertexBuffer::Create(sizeof(vertices), vertices);
-        vertexBuffer.reset(Kaleidoscope::VertexBuffer::Create(vertices, sizeof(vertices)));
+        Kaleidoscope::Ref<Kaleidoscope::VertexBuffer> vertexBuffer = Kaleidoscope::VertexBuffer::Create(vertices, sizeof(vertices));
+
         Kaleidoscope::BufferLayout layout = {
             {Kaleidoscope::ShaderDataType::Float3, "a_Position"},
             {Kaleidoscope::ShaderDataType::Float4, "a_Color"},
@@ -42,9 +41,8 @@ public:
 
         // 创建、绑定indexBuffer(同时将其添加至VertexArray中)
         uint32_t indices[3] = {0, 1, 2};
-        Kaleidoscope::Ref<Kaleidoscope::IndexBuffer> indexBuffer;
+        Kaleidoscope::Ref<Kaleidoscope::IndexBuffer> indexBuffer = Kaleidoscope::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
-        indexBuffer.reset(Kaleidoscope::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
         m_VertexArray->SetIndexBuffer(indexBuffer);
 
         // 渲染正方形
@@ -54,16 +52,14 @@ public:
             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
             0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
             -0.5f, 0.5f, 0.0f, 0.0f, 1.0f};
-        Kaleidoscope::Ref<Kaleidoscope::VertexBuffer> squareVB;
-        squareVB.reset(Kaleidoscope::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+        Kaleidoscope::Ref<Kaleidoscope::VertexBuffer> squareVB = Kaleidoscope::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
         squareVB->SetLayout({{Kaleidoscope::ShaderDataType::Float3, "a_Position"},
                              {Kaleidoscope::ShaderDataType::Float2, "a_TexCoord"}});
         m_SquareVA->AddVertexBuffer(squareVB);
 
         // 创建、绑定indexBuffer(同时将其添加至VertexArray中)
         uint32_t squareIndices[6] = {0, 1, 2, 2, 3, 0};
-        Kaleidoscope::Ref<Kaleidoscope::IndexBuffer> squareIB;
-        squareIB.reset(Kaleidoscope::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+        Kaleidoscope::Ref<Kaleidoscope::IndexBuffer> squareIB = Kaleidoscope::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
         m_SquareVA->SetIndexBuffer(squareIB);
         // m_SquareVA->SetIndexBuffer(m_IndexBuffer);
 
@@ -140,12 +136,12 @@ public:
 
         auto textureShader = m_ShaderLibrary.Load("../Sandbox/assets/shaders/Texture.glsl");
 
-        m_Texture = Kaleidoscope::Texture2D::Create("/Users/crystalized/cpp_project/LearnEngine/Sandbox/assets/textures/Checkerboard.png");
+        m_Texture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/Checkerboard.png");
         // m_Texture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/ChernoLogo.png");
-        m_LogoTexture = Kaleidoscope::Texture2D::Create("/Users/crystalized/cpp_project/LearnEngine/Sandbox/assets/textures/ChernoLogo.png");
+        m_LogoTexture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/ChernoLogo.png");
 
-        std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(textureShader)->Bind();
-        std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+        textureShader->Bind();
+        textureShader->SetInt("u_Texture", 0);
     }
 
     void OnUpdate(Kaleidoscope::Timestep ts) override
@@ -163,8 +159,8 @@ public:
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f)); // 因为不需要一直计算，所以可以定义为static或者设置为成员变量，从而优化性能
 
-        std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(m_FlatColorShader)->Bind();
-        std::dynamic_pointer_cast<Kaleidoscope::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+        m_FlatColorShader->Bind();
+        m_FlatColorShader->SetFloat3("u_Color", m_SquareColor);
 
         for (int y = 0; y < 20; y++)
         {

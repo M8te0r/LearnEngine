@@ -13,6 +13,8 @@ namespace Kaleidoscope
 
     void OpenGLContext::Init()
     {
+        KLD_PROFILE_FUNCTION();
+
         glfwMakeContextCurrent(m_WindowHandle);
         // 使用glad载入所有opengl函数指针
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
