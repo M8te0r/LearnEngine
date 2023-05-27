@@ -15,11 +15,17 @@ extern Kaleidoscope::Application *Kaleidoscope::CreateApplication();
 int main(int argc, char **argv)
 {
     Kaleidoscope::Log::Init();
-    KLD_CORE_WARN("Initialized Log!");
-    KLD_INFO("Hello");
 
+    KLD_PROFILE_BEGIN_SESSION("Startup", "KaleidoscopeProfile-Startup.json");
     auto app = Kaleidoscope::CreateApplication();
+    KLD_PROFILE_END_SESSION();
+    
+    KLD_PROFILE_BEGIN_SESSION("Runtime", "KaleidoscopeProfile-Runtime.json");
     app->Run();
+    KLD_PROFILE_END_SESSION();
+
+    KLD_PROFILE_BEGIN_SESSION("Shutdown", "KaleidoscopeProfile-Shutdown.json");
     delete app;
+    KLD_PROFILE_END_SESSION();
 }
 #endif

@@ -15,6 +15,7 @@
 #include <unordered_set>
 
 #include "Kaleidoscope/Core/Log.h"
+#include "Kaleidoscope/Debug/Instrumentor.h"
 
 #ifdef KLD_PLATFORM_WINDOWS
 #include <Windows.h>
