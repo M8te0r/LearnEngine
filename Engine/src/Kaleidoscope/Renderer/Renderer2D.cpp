@@ -90,6 +90,7 @@ namespace Kaleidoscope
 
         // 使用color，则默认的u_Texture设置为(1,1,1,1)纯白，从而使fragment shader输出color的颜色
         s_Data->TextureShader->SetFloat4("u_Color", color); // 绑定color
+        s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f); // 绑定纹理放缩
         s_Data->WhiteTexture->Bind();                       // 绑定纯白texture:
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
@@ -99,20 +100,76 @@ namespace Kaleidoscope
         RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture)
+    void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4& tintColor)
     {
-        DrawQuad({position.x, position.y, 0.0f}, size, texture);
+        DrawQuad({position.x, position.y, 0.0f}, size, texture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture)
+    void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4& tintColor)
     {
         KLD_PROFILE_FUNCTION();
 
         // 使用texture，则默认的u_Color设置为(1,1,1,1)纯白，从而使fragment shader输出texture的颜色
-        s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f)); // 绑定纯白color
+        s_Data->TextureShader->SetFloat4("u_Color", tintColor); // 绑定纯白color
+        s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor); // 绑定纹理放缩
+
         texture->Bind();                                              // 绑定shader
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+        s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+        s_Data->QuadVertexArray->Bind();
+        RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+    }
+
+    void Renderer2D::DrawRotateQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+    {
+        DrawRotateQuad({ position.x, position.y, 0.0f }, size, rotation, color);
+    }
+
+    void Renderer2D::DrawRotateQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+    {
+        KLD_PROFILE_FUNCTION();
+
+        /*
+            DrawQuad()根据传入参数的不同，动态的改变Fragment Shader的参数
+            当传入的第三个参数为color时，shader接收这个color数据，使用默认的white texture，从而使最终颜色为color
+            当传入的第三个参数为texture时，shader接收这个texture数据，使u_color=vec4(1.0)1，从而使最终颜色为texture
+        */
+
+        // 使用color，则默认的u_Texture设置为(1,1,1,1)纯白，从而使fragment shader输出color的颜色
+        s_Data->TextureShader->SetFloat4("u_Color", color); // 绑定color
+        s_Data->TextureShader->SetFloat("u_TilingFactor", 1.0f); // 绑定纹理放缩
+        s_Data->WhiteTexture->Bind();                       // 绑定纯白texture:
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
+                            * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+                            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+        s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+        s_Data->QuadVertexArray->Bind();
+        RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+    }
+
+    void Renderer2D::DrawRotateQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+    {
+        DrawRotateQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tilingFactor, tintColor);
+    }
+
+    void Renderer2D::DrawRotateQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
+    {
+        KLD_PROFILE_FUNCTION();
+
+        // 使用texture，则默认的u_Color设置为(1,1,1,1)纯白，从而使fragment shader输出texture的颜色
+        s_Data->TextureShader->SetFloat4("u_Color", tintColor); // 绑定纯白color
+        s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor); // 绑定纹理放缩
+
+        texture->Bind();                                              // 绑定shader
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
+                            * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+                            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
         s_Data->TextureShader->SetMat4("u_Transform", transform);
 
         s_Data->QuadVertexArray->Bind();
