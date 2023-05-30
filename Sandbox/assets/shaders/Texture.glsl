@@ -32,9 +32,9 @@ in vec2 v_TexCoord ;
 in float v_TexIndex;
 in float v_TilingFactor;
 
+// usually 32 uinit, but apple only support 16 unit
+uniform sampler2D u_Textures[16];
 
-
-uniform sampler2D u_Textures[32];
 
 void main(){
     color =  texture(u_Textures[int(v_TexIndex)],  v_TexCoord * v_TilingFactor) * v_Color;
