@@ -20,9 +20,9 @@ namespace Kaleidoscope
 
     struct Renderer2DData
     {
-        const uint32_t MaxQuads = 10000;
-        const uint32_t MaxVertices = MaxQuads * 4;
-        const uint32_t MaxIndices = MaxQuads * 6;
+        static const uint32_t MaxQuads = 20000;
+        static const uint32_t MaxVertices = MaxQuads * 4;
+        static const uint32_t MaxIndices = MaxQuads * 6;
 
         static const uint32_t MaxTextureSlots = 16; // TODO: Apple only support 16 unit
 
@@ -39,6 +39,9 @@ namespace Kaleidoscope
         uint32_t TextureSlotIndex = 1;// 下标为0时，启用的是white texture
 
         glm::vec4 QuadVertexPositions[4];
+
+        
+        Renderer2D::Statistics Stats;
     };
 
     static Renderer2DData s_Data;
@@ -145,6 +148,18 @@ namespace Kaleidoscope
         }
 
         RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+        s_Data.Stats.DrawCalls++;
+    }
+
+    void Renderer2D::FlushAndReset()
+    {
+
+        EndScene();
+        s_Data.QuadIndexCount = 0;
+        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+        s_Data.TextureSlotIndex = 1;
     }
 
     void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color)
@@ -155,6 +170,11 @@ namespace Kaleidoscope
     void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color)
     {
         KLD_PROFILE_FUNCTION();
+        
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) 
+        {
+            FlushAndReset();
+        }
 
         const float textureIndex = 0.0f;// white texture
         const float tilingFactor = 1.0f;
@@ -192,6 +212,9 @@ namespace Kaleidoscope
 
         s_Data.QuadIndexCount += 6;
 
+        s_Data.Stats.QuadCount++;
+
+
     }
 
     void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
@@ -202,6 +225,11 @@ namespace Kaleidoscope
     void Renderer2D::DrawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
     {
         KLD_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+        {
+            FlushAndReset();
+        }
 
         constexpr glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -258,6 +286,9 @@ namespace Kaleidoscope
 
         s_Data.QuadIndexCount += 6;
 
+        s_Data.Stats.QuadCount++;
+
+
     }
 
     void Renderer2D::DrawRotateQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color)
@@ -268,6 +299,11 @@ namespace Kaleidoscope
     void Renderer2D::DrawRotateQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color)
     {
         KLD_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+        {
+            FlushAndReset();
+        }
 
         /*
             DrawQuad()根据传入参数的不同，动态的改变Fragment Shader的参数
@@ -311,6 +347,9 @@ namespace Kaleidoscope
 
 
         s_Data.QuadIndexCount += 6;
+
+        s_Data.Stats.QuadCount++;
+
     }
 
     void Renderer2D::DrawRotateQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
@@ -321,6 +360,11 @@ namespace Kaleidoscope
     void Renderer2D::DrawRotateQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
     {
         KLD_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+        {
+            FlushAndReset();
+        }
 
         constexpr glm::vec4 color = { 1.0f,1.0f,1.0f,1.0f };
 
@@ -378,6 +422,19 @@ namespace Kaleidoscope
 
 
         s_Data.QuadIndexCount += 6;
+
+        s_Data.Stats.QuadCount++;
     }
+
+    void Renderer2D::ResetStats() 
+    {
+        memset(&s_Data.Stats, 0, sizeof(Statistics));
+    }
+
+    Renderer2D::Statistics Renderer2D::GetStats()
+    {
+        return s_Data.Stats;
+    }
+
 
 } // namespace Kaleidoscope
