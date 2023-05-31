@@ -36,6 +36,8 @@ namespace Kaleidoscope
 
         std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
         uint32_t TextureSlotIndex = 1;// 下标为0时，启用的是white texture
+
+        glm::vec4 QuadVertexPositions[4];
     };
 
     static Renderer2DData s_Data;
@@ -104,7 +106,10 @@ namespace Kaleidoscope
 
         s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
-
+        s_Data.QuadVertexPositions[0] = { -0.5f,-0.5f,0.0f,1.0f };
+        s_Data.QuadVertexPositions[1] = { 0.5f,-0.5f,0.0f,1.0f };
+        s_Data.QuadVertexPositions[2] = { 0.5f,0.5f,0.0f,1.0f };
+        s_Data.QuadVertexPositions[3] = { -0.5f,0.5f,0.0f,1.0f };
     }
 
     void Renderer2D::Shutdown()
@@ -161,28 +166,31 @@ namespace Kaleidoscope
         const float texIndex = 0.0f;// white texture
         const float tilingFactor = 1.0f;
 
-        s_Data.QuadVertexBufferPtr->Position = position;
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
         s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
         s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.0f };
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
         s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
         s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
         s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
         s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.0f };
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
@@ -192,24 +200,6 @@ namespace Kaleidoscope
 
         s_Data.QuadIndexCount += 6;
 
-        /*
-            DrawQuad()根据传入参数的不同，动态的改变Fragment Shader的参数
-            当传入的第三个参数为color时，shader接收这个color数据，使用默认的white texture，从而使最终颜色为color
-            当传入的第三个参数为texture时，shader接收这个texture数据，使u_color=vec4(1.0)1，从而使最终颜色为texture
-        */
-
-        // 使用color，则默认的u_Texture设置为(1,1,1,1)纯白，从而使fragment shader输出color的颜色
-        /*
-        s_Data.TextureShader->SetFloat4("u_Color", color); // 绑定color
-        s_Data.TextureShader->SetFloat("u_TilingFactor", 1.0f); // 绑定纹理放缩
-        s_Data.WhiteTexture->Bind();                       // 绑定纯白texture:
-
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-        s_Data.TextureShader->SetMat4("u_Transform", transform);
-
-        s_Data.QuadVertexArray->Bind();
-        RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
-        */
     }
 
     void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4& tintColor)
@@ -243,28 +233,31 @@ namespace Kaleidoscope
             s_Data.TextureSlotIndex++;
         }
 
-        s_Data.QuadVertexBufferPtr->Position = position;
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
         s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
         s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.0f };
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
         s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
         s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
         s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
         s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.0f };
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
         s_Data.QuadVertexBufferPtr->Color = color;
         s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
         s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
@@ -274,19 +267,6 @@ namespace Kaleidoscope
 
         s_Data.QuadIndexCount += 6;
 
-#if OLD_PATH
-        // 使用texture，则默认的u_Color设置为(1,1,1,1)纯白，从而使fragment shader输出texture的颜色
-        s_Data.TextureShader->SetFloat4("u_Color", tintColor); // 绑定纯白color
-        s_Data.TextureShader->SetFloat("u_TilingFactor", tilingFactor); // 绑定纹理放缩
-
-        texture->Bind();                                              // 绑定shader
-
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-        s_Data.TextureShader->SetMat4("u_Transform", transform);
-
-        s_Data.QuadVertexArray->Bind();
-        RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
-#endif
     }
 
     void Renderer2D::DrawRotateQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
@@ -303,20 +283,43 @@ namespace Kaleidoscope
             当传入的第三个参数为color时，shader接收这个color数据，使用默认的white texture，从而使最终颜色为color
             当传入的第三个参数为texture时，shader接收这个texture数据，使u_color=vec4(1.0)1，从而使最终颜色为texture
         */
+        const float texIndex = 0.0f;// white texture
+        const float tilingFactor = 1.0f;
 
-        // 使用color，则默认的u_Texture设置为(1,1,1,1)纯白，从而使fragment shader输出color的颜色
-        s_Data.TextureShader->SetFloat4("u_Color", color); // 绑定color
-        s_Data.TextureShader->SetFloat("u_TilingFactor", 1.0f); // 绑定纹理放缩
-        s_Data.WhiteTexture->Bind();                       // 绑定纯白texture:
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                            * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f,0.0f,1.0f })
+                            * glm::scale(glm::mat4(1.0f), { size.x,size.y,1.0f });
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
-                            * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
-                            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
 
-        s_Data.TextureShader->SetMat4("u_Transform", transform);
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexArray->Bind();
-        RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
+
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
+
+
+        s_Data.QuadIndexCount += 6;
     }
 
     void Renderer2D::DrawRotateQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
@@ -328,19 +331,62 @@ namespace Kaleidoscope
     {
         KLD_PROFILE_FUNCTION();
 
-        // 使用texture，则默认的u_Color设置为(1,1,1,1)纯白，从而使fragment shader输出texture的颜色
-        s_Data.TextureShader->SetFloat4("u_Color", tintColor); // 绑定纯白color
-        s_Data.TextureShader->SetFloat("u_TilingFactor", tilingFactor); // 绑定纹理放缩
+        constexpr glm::vec4 color = { 1.0f,1.0f,1.0f,1.0f };
 
-        texture->Bind();                                              // 绑定shader
+        float textureIndex = 0.0f;
 
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
-                            * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
-                            * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        s_Data.TextureShader->SetMat4("u_Transform", transform);
+        // 检查是否所有texture都提交至textureSlots中
+        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+        {
+            // 遍历所有的slot，比较当前slot中texture的指针是否与参数指针相同
+            if (*s_Data.TextureSlots[i].get() == *texture.get())
+            {
+                textureIndex = (float)i;
+                break;
+            }
+        }
 
-        s_Data.QuadVertexArray->Bind();
-        RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
+        if (textureIndex == 0.0f)
+        {
+            textureIndex = (float)s_Data.TextureSlotIndex;
+            s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+            s_Data.TextureSlotIndex++;
+        }
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                            * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f,0.0f,1.0f })
+                            * glm::scale(glm::mat4(1.0f), { size.x,size.y,1.0f });
+
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
+
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
+
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
+
+        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
+        s_Data.QuadVertexBufferPtr->Color = color;
+        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+        s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+        s_Data.QuadVertexBufferPtr++;
+
+
+        s_Data.QuadIndexCount += 6;
     }
 
 } // namespace Kaleidoscope
