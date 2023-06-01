@@ -1,6 +1,6 @@
 set(TARGET_NAME ${PROJECT_NAME})
 
-add_executable(${TARGET_NAME} SandboxApp.cpp Sandbox2D.cpp)
+add_executable(${TARGET_NAME} SandboxApp.cpp Sandbox2D.cpp "ParticleSystem.h" "ParticleSystem.cpp")
 # add_dependencies(${TARGET_NAME}  Engine)
 
 target_link_libraries(${TARGET_NAME}  Engine)
