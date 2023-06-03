@@ -206,9 +206,18 @@ namespace Kaleidoscope
     {
         KLD_PROFILE_FUNCTION();
 
+        constexpr float x = 7, y = 6;                                // 表示texture sheet上，从左边往右数第7个、从下往上数第6个texture（每个大小是128*128）
+        constexpr float sheetWidth = 2560.0f, sheetHeight = 1664.0f; // texture sheet的实际长宽
+        constexpr float spriteWidth = 128.0f, spriteHeight = 128.0f; // texture sheet上每个texture的大小
+
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-        constexpr glm::vec2 textureCoords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
+        // 将texture sheet中的某一个区域重现映射到[0,1]区间内
+        constexpr glm::vec2 textureCoords[] = {
+            {(x * spriteWidth) / sheetWidth, (y * spriteHeight) / sheetHeight},
+            {((x + 1) * spriteWidth) / sheetWidth, (y * spriteHeight) / sheetHeight},
+            {((x + 1) * spriteWidth) / sheetWidth, ((y + 1) * spriteHeight) / sheetHeight},
+            {(x * spriteWidth) / sheetWidth, ((y + 1) * spriteHeight) / sheetHeight}};
 
         if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
         {
