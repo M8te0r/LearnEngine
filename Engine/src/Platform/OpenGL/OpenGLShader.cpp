@@ -209,7 +209,7 @@ namespace Kaleidoscope
         // UNSUPPORTED (log once): POSSIBLE ISSUE: unit 1 GLD_TEXTURE_INDEX_2D is unloadable and bound to sampler type (Float) - using zero texture because texture unloadable
         // possibly solutions:
         // https://stackoverflow.com/questions/70338946/gl-texturen1-activated-and-bound-instead-of-gl-texturen-on-apple-silicon-m1-po
-        // https: // developer.apple.com/forums/thread/683865
+        // https://developer.apple.com/forums/thread/683865
 
         glUseProgram(m_RendererID);
     }
