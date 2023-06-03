@@ -22,7 +22,7 @@ namespace Kaleidoscope
     OpenGLShader::OpenGLShader(const std::string &filepath)
     {
         KLD_PROFILE_FUNCTION();
- 
+
         std::string source = ReadFile(filepath);
         auto shaderSources = Preprocess(source);
         Compile(shaderSources);
@@ -205,6 +205,12 @@ namespace Kaleidoscope
     {
         KLD_PROFILE_FUNCTION();
 
+        // FIXME: happed on Apple M1 only
+        // UNSUPPORTED (log once): POSSIBLE ISSUE: unit 1 GLD_TEXTURE_INDEX_2D is unloadable and bound to sampler type (Float) - using zero texture because texture unloadable
+        // possibly solutions:
+        // https://stackoverflow.com/questions/70338946/gl-texturen1-activated-and-bound-instead-of-gl-texturen-on-apple-silicon-m1-po
+        // https: // developer.apple.com/forums/thread/683865
+
         glUseProgram(m_RendererID);
     }
 
@@ -222,14 +228,14 @@ namespace Kaleidoscope
         UploadUniformInt(name, value);
     }
 
-    void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
+    void OpenGLShader::SetIntArray(const std::string &name, int *values, uint32_t count)
     {
         KLD_PROFILE_FUNCTION();
 
         UploadUniformIntArray(name, values, count);
     }
 
-    void OpenGLShader::SetFloat(const std::string& name, float value)
+    void OpenGLShader::SetFloat(const std::string &name, float value)
     {
         KLD_PROFILE_FUNCTION();
 
@@ -263,7 +269,7 @@ namespace Kaleidoscope
         glUniform1i(location, value);
     }
 
-    void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+    void OpenGLShader::UploadUniformIntArray(const std::string &name, int *values, uint32_t count)
     {
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1iv(location, count, values);
