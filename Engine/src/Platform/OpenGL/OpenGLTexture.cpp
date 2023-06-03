@@ -48,11 +48,11 @@ namespace Kaleidoscope
         }
 
         // https://stackoverflow.com/questions/49462889/stbi-load-doesnt-return-any-value
-        /*
+
         if (stbi_failure_reason())
-            std::cout << "\n"
-                      << stbi_failure_reason() << "\n";
-        */
+        {
+            std::cout << stbi_failure_reason() << "\n";
+        }
 
         KLD_CORE_ASSERT(data, "Failed to load image!");
         m_Width = width;
@@ -87,7 +87,7 @@ namespace Kaleidoscope
         glBindTexture(GL_TEXTURE_2D, m_RendererID);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

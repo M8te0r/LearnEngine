@@ -24,6 +24,7 @@ private:
 
     Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_CheckerboardTexture;
     Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_SpriteSheet;
+    Kaleidoscope::Ref<Kaleidoscope::SubTexture2D> m_TextureStairs, m_TextureBarrel, m_TextureTree;
 
     glm::vec4 m_SquareColor = {0.2f, 0.3f, 0.8f, 1.0f};
 

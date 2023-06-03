@@ -14,12 +14,13 @@ struct ParticleProps
 class ParticleSystem
 {
 public:
-	ParticleSystem(uint32_t maxParticles = 1000);
+	ParticleSystem(uint32_t maxParticles = 100000);
 
 	void OnUpdate(Kaleidoscope::Timestep ts);
-	void OnRender(Kaleidoscope::OrthographicCamera& camera);
+	void OnRender(Kaleidoscope::OrthographicCamera &camera);
 
-	void Emit(const ParticleProps& particleProps);
+	void Emit(const ParticleProps &particleProps);
+
 private:
 	struct Particle
 	{

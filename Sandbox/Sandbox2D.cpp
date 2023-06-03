@@ -5,7 +5,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 Sandbox2D::Sandbox2D()
-    : Layer("Sandbox2D"), m_CameraController(1280.0f / 720.f)
+    : Layer("Sandbox2D"), m_CameraController(1280.0f / 720.f), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
 {
 }
 
@@ -17,11 +17,15 @@ void Sandbox2D::OnAttach()
     m_CheckerboardTexture = Kaleidoscope::Texture2D::Create("../Sandbox/assets/textures/Checkerboard.png");
     m_SpriteSheet = Kaleidoscope::Texture2D::Create("../Sandbox/assets/game/textures/RPGpack_sheet_2X.png");
 
+    m_TextureStairs = Kaleidoscope::SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
+    m_TextureBarrel = Kaleidoscope::SubTexture2D::CreateFromCoords(m_SpriteSheet, {8, 2}, {128, 128});
+    m_TextureTree = Kaleidoscope::SubTexture2D::CreateFromCoords(m_SpriteSheet, {2, 1}, {128, 128}, {1, 2});
+
     // Init here
     m_Particle.ColorBegin = {254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f};
     m_Particle.ColorEnd = {254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f};
     m_Particle.SizeBegin = 0.5f, m_Particle.SizeVariation = 0.3f, m_Particle.SizeEnd = 0.0f;
-    m_Particle.LifeTime = 1.0f;
+    m_Particle.LifeTime = 5.0f;
     m_Particle.Velocity = {0.0f, 0.0f};
     m_Particle.VelocityVariation = {3.0f, 1.0f};
     m_Particle.Position = {0.0f, 0.0f};
@@ -48,6 +52,7 @@ void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
         Kaleidoscope::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
         Kaleidoscope::RenderCommand::Clear();
     }
+
 #if 0
     // 4个Quad
     {
@@ -59,7 +64,7 @@ void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
 
         Kaleidoscope::Renderer2D::DrawRotateQuad({1.0f, 0.0f}, {0.8f, 0.8f}, glm::radians(-45.0f), {0.8f, 0.2f, 0.3f, 1.0f});
         Kaleidoscope::Renderer2D::DrawQuad({-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});
-        Kaleidoscope::Renderer2D::DrawQuad({0.5f, -0.5f}, {0.5f, 0.75f}, {0.2f, 0.3f, 0.8f, 1.0f});
+        Kaleidoscope::Renderer2D::DrawQuad({0.5f, -0.5f}, {0.5f, 0.75f}, m_SquareColor);
         Kaleidoscope::Renderer2D::DrawQuad({0.0f, 0.0f, -0.1f}, {20.0f, 20.0f}, m_CheckerboardTexture, 10.0f);
         Kaleidoscope::Renderer2D::DrawRotateQuad({-2.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, glm::radians(rotation), m_CheckerboardTexture, 20.0f);
 
@@ -98,7 +103,9 @@ void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
 
     // 游戏材质
     Kaleidoscope::Renderer2D::BeginScene(m_CameraController.GetCamera());
-    Kaleidoscope::Renderer2D::DrawQuad({0.0f, 0.0f, 0.5f}, {1.0f, 1.0f}, m_SpriteSheet);
+    Kaleidoscope::Renderer2D::DrawQuad({0.0f, 0.0f, 0.5f}, {1.0f, 1.0f}, m_TextureStairs);
+    Kaleidoscope::Renderer2D::DrawQuad({1.0f, 0.0f, 0.5f}, {1.0f, 1.0f}, m_TextureBarrel);
+    Kaleidoscope::Renderer2D::DrawQuad({-1.0f, 0.0f, 0.5f}, {1.0f, 2.0f}, m_TextureTree);
     Kaleidoscope::Renderer2D::EndScene();
 }
 
