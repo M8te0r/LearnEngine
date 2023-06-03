@@ -23,7 +23,7 @@ private:
     Kaleidoscope::Ref<Kaleidoscope::Shader> m_FlatColorShader;
 
     Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_CheckerboardTexture;
-
+    Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_SpriteSheet;
 
     glm::vec4 m_SquareColor = {0.2f, 0.3f, 0.8f, 1.0f};
 
