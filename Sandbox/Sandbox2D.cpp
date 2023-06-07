@@ -4,26 +4,25 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-
 static const uint32_t s_MapWidth = 24;
-static const char* s_MapTiles =
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-"WWWWWWWCCCCCCWWWWWWWWWWW"
-"WWWWWDDDDDDDDDDDDWWWWWWW"
-"WWWWDDDDDDDDDDDDDDDDWWWW"
-"WWWDDDDDDDDDDDDDDDDDDWWW"
-"WWDDDDWWWDDDDDDDDDDDDWWW"
-"WDDDDDWWWDDDDDDDDDDDDDWW"
-"WWDDDDDDDDDDDDDDDDDDDWWW"
-"WWWWDDDDDDDDDDDDDDDDWWWW"
-"WWWWWDDDDDDDDDDDDDDWWWWW"
-"WWWWWWDDDDDDDDDDDWWWWWWW"
-"WWWWWWWDDDDDDDDDWWWWWWWW"
-"WWWWWWWWWWDDDDWWWWWWWWWW"
-"WWWWWWWWWWWWWWWWWWWWWWWW";
+static const char *s_MapTiles =
+	"WWWWWWWWWWWWWWWWWWWWWWWW"
+	"WWWWWWWCCCCCCWWWWWWWWWWW"
+	"WWWWWDDDDDDDDDDDDWWWWWWW"
+	"WWWWDDDDDDDDDDDDDDDDWWWW"
+	"WWWDDDDDDDDDDDDDDDDDDWWW"
+	"WWDDDDWWWDDDDDDDDDDDDWWW"
+	"WDDDDDWWWDDDDDDDDDDDDDWW"
+	"WWDDDDDDDDDDDDDDDDDDDWWW"
+	"WWWWDDDDDDDDDDDDDDDDWWWW"
+	"WWWWWDDDDDDDDDDDDDDWWWWW"
+	"WWWWWWDDDDDDDDDDDWWWWWWW"
+	"WWWWWWWDDDDDDDDDWWWWWWWW"
+	"WWWWWWWWWWDDDDWWWWWWWWWW"
+	"WWWWWWWWWWWWWWWWWWWWWWWW";
 
 Sandbox2D::Sandbox2D()
-	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
+	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.f), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
 {
 }
 
@@ -39,8 +38,7 @@ void Sandbox2D::OnAttach()
 	fbSpec.Height = 720;
 	m_Framebuffer = Kaleidoscope::Framebuffer::Create(fbSpec);
 
-
-#if define 0
+#if 0
 
 
 	m_SpriteSheet = Kaleidoscope::Texture2D::Create("../Sandbox/assets/game/textures/RPGpack_sheet_2X.png");
@@ -64,8 +62,6 @@ void Sandbox2D::OnAttach()
 
 	m_CameraController.SetZoomLevel(5.0f);
 #endif // 0
-
-
 }
 
 void Sandbox2D::OnDetach()
@@ -87,10 +83,9 @@ void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
 	{
 		KLD_PROFILE_SCOPE("Renderer Prep");
 		m_Framebuffer->Bind();
-		Kaleidoscope::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		Kaleidoscope::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
 		Kaleidoscope::RenderCommand::Clear();
 	}
-
 
 	// 4个Quad
 	{
@@ -100,32 +95,29 @@ void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
 
 		Kaleidoscope::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		Kaleidoscope::Renderer2D::DrawRotateQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
-		Kaleidoscope::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		Kaleidoscope::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, m_SquareColor);
-		Kaleidoscope::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_CheckerboardTexture, 10.0f);
-		Kaleidoscope::Renderer2D::DrawRotateQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(rotation), m_CheckerboardTexture, 20.0f);
+		Kaleidoscope::Renderer2D::DrawRotateQuad({1.0f, 0.0f}, {0.8f, 0.8f}, glm::radians(-45.0f), {0.8f, 0.2f, 0.3f, 1.0f});
+		Kaleidoscope::Renderer2D::DrawQuad({-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});
+		Kaleidoscope::Renderer2D::DrawQuad({0.5f, -0.5f}, {0.5f, 0.75f}, m_SquareColor);
+		Kaleidoscope::Renderer2D::DrawQuad({0.0f, 0.0f, -0.1f}, {20.0f, 20.0f}, m_CheckerboardTexture, 10.0f);
+		Kaleidoscope::Renderer2D::DrawRotateQuad({-2.0f, 0.0f, 0.0f}, {1.0f, 1.0f}, glm::radians(rotation), m_CheckerboardTexture, 20.0f);
 
 		Kaleidoscope::Renderer2D::EndScene();
-		
+
 		Kaleidoscope::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		for (float y = -5.0f; y < 5.0f; y += 0.5f)
 		{
 			for (float x = -5.0f; x < 5.0f; x += 0.5f)
 			{
-				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
-				Kaleidoscope::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
+				glm::vec4 color = {(x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f};
+				Kaleidoscope::Renderer2D::DrawQuad({x, y}, {0.45f, 0.45f}, color);
 			}
 		}
 		Kaleidoscope::Renderer2D::EndScene();
-		
+
 		m_Framebuffer->UnBind();
 	}
 
-
-
-
-#if define 0
+#if 0
 
 
 	// 粒子系统
@@ -176,7 +168,6 @@ void Sandbox2D::OnUpdate(Kaleidoscope::Timestep ts)
 	//Kaleidoscope::Renderer2D::DrawQuad({-1.0f, 0.0f, 0.5f}, {1.0f, 2.0f}, m_TextureTree);
 	Kaleidoscope::Renderer2D::EndScene();
 #endif // 0
-
 }
 
 void Sandbox2D::OnImGuiRender()
@@ -211,7 +202,7 @@ void Sandbox2D::OnImGuiRender()
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		if (opt_fullscreen)
 		{
-			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			const ImGuiViewport *viewport = ImGui::GetMainViewport();
 			ImGui::SetNextWindowPos(viewport->WorkPos);
 			ImGui::SetNextWindowSize(viewport->WorkSize);
 			ImGui::SetNextWindowViewport(viewport->ID);
@@ -245,13 +236,12 @@ void Sandbox2D::OnImGuiRender()
 			ImGui::PopStyleVar(2);
 
 		// Submit the DockSpace
-		ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO &io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
-
 
 		if (ImGui::BeginMenuBar())
 		{
@@ -266,7 +256,6 @@ void Sandbox2D::OnImGuiRender()
 				ImGui::EndMenu();
 			}
 
-
 			ImGui::EndMenuBar();
 		}
 
@@ -280,9 +269,9 @@ void Sandbox2D::OnImGuiRender()
 
 		ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
 
-		//uint32_t textureID = m_CheckerboardTexture->GetRenderID();
+		// uint32_t textureID = m_CheckerboardTexture->GetRenderID();
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 1280.0f,720.0f });
+		ImGui::Image((void *)textureID, ImVec2{1280.0f, 720.0f});
 		ImGui::End();
 
 		ImGui::End();
@@ -300,12 +289,12 @@ void Sandbox2D::OnImGuiRender()
 		ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
 
 		uint32_t textureID = m_CheckerboardTexture->GetRenderID();
-		ImGui::Image((void*)textureID, ImVec2{ 256.0f,256.0f });
+		ImGui::Image((void *)textureID, ImVec2{256.0f, 256.0f});
 		ImGui::End();
 	}
 }
 
-void Sandbox2D::OnEvent(Kaleidoscope::Event& e)
+void Sandbox2D::OnEvent(Kaleidoscope::Event &e)
 {
 	m_CameraController.OnEvent(e);
 }
