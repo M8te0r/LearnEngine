@@ -54,6 +54,11 @@ namespace Kaleidoscope
         layer->OnAttach();
     }
 
+    void Application::Close()
+    {
+        m_Running = false;
+    }
+
     void Application::OnEvent(Event &e)
     {
         KLD_PROFILE_FUNCTION();
