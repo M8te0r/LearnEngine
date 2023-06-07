@@ -1,4 +1,4 @@
-#include "Kaleidoscope/Core/Core.h"
+#include "Kaleidoscope/Core/Base.h"
 #include "Kaleidoscope/Events/Event.h"
 #include <sstream>
 

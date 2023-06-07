@@ -21,6 +21,7 @@ private:
     // Temp
     Kaleidoscope::Ref<Kaleidoscope::VertexArray> m_SquareVA;
     Kaleidoscope::Ref<Kaleidoscope::Shader> m_FlatColorShader;
+    Kaleidoscope::Ref<Kaleidoscope::Framebuffer> m_Framebuffer;
 
     Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_CheckerboardTexture;
     Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_SpriteSheet;

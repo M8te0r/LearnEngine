@@ -1,5 +1,5 @@
 #pragma once
-#include "Kaleidoscope/Core/Core.h"
+#include "Kaleidoscope/Core/Base.h"
 #include "Kaleidoscope/Core/Timestep.h"
 #include "Kaleidoscope/Events/Event.h"
 
