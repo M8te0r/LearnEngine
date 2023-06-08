@@ -14,20 +14,25 @@ namespace Kaleidoscope {
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
 	void OpenGLFramebuffer::Invalidate()
 	{
-		
+		// 检查是否有framebuffer，如果有，删除重新创建新的framebuffer
+		if (m_RendererID) 
+		{
+			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachment);
+			glDeleteTextures(1, &m_DepthAttachment);
+		}
 
 		// 创建framebuffer
 		//glCreateFramebuffers(1, &m_RendererID);// FIXME: OpenGL 4.5以上 
 		
 		glGenFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-
-		
-
 
 		// 创建颜色信息附件
 		//glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachment);// FIXME: OpenGL 4.5以上 
@@ -61,11 +66,20 @@ namespace Kaleidoscope {
 	void OpenGLFramebuffer::Bind() 
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
 	}
 
 	void OpenGLFramebuffer::UnBind() 
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
+	{
+		m_Specification.Width = width;
+		m_Specification.Height = height;
+		
+		Invalidate();
 	}
 
 

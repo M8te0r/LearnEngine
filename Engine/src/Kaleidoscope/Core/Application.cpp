@@ -69,14 +69,15 @@ namespace Kaleidoscope
         dispatcher.Dispatch<WindowResizeEvent>(KLD_BIND_EVENT_FN(Application::OnWindowResize));
 
         // 从后向前执行layer的event
-        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+        for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
         {
-            (*--it)->OnEvent(e);
             // 如果这个event已经处理过了，则跳过
             if (e.Handled)
             {
                 break;
             }
+            (*it)->OnEvent(e);
+
         }
     }
 

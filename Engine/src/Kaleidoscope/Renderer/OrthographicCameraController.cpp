@@ -60,6 +60,12 @@ namespace Kaleidoscope
         dispatcher.Dispatch<WindowResizeEvent>(KLD_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
     }
 
+    void OrthographicCameraController::OnResize(float width, float height)
+    {
+        m_AspectRatio = width / height;
+        CalculateView();
+    }
+
     void OrthographicCameraController::CalculateView()
     {
         m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
@@ -82,8 +88,7 @@ namespace Kaleidoscope
         KLD_PROFILE_FUNCTION();
 
         // FIXME: 改变窗口大小的时候，画面会变成原来的1/4(MacOS only)
-        m_AspectRatio -= (float)e.GetWidth() / (float)e.GetHeight();
-        CalculateView();
+        OnResize((float)e.GetWidth(), (float)e.GetHeight());
 
         return false;
     }

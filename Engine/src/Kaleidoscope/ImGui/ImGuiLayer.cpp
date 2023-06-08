@@ -65,6 +65,14 @@ namespace Kaleidoscope
         ImGui::DestroyContext();
     }
 
+    void ImGuiLayer::OnEvent(Event& e)
+    {
+        // 设置imgui的viewport不接受鼠标事件和
+        ImGuiIO& io = ImGui::GetIO();
+        e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+        e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+    }
+
     void ImGuiLayer::Begin()
     {
         KLD_PROFILE_FUNCTION();
