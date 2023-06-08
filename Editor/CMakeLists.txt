@@ -1,9 +1,9 @@
-set(TARGET_NAME "KaleidoscopeSandbox")
+set(TARGET_NAME "KaleidoscopeEditor")
 
-file(GLOB_RECURSE sandbox_head_files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-file(GLOB_RECURSE sandbox_source_files "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE editor_head_files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+file(GLOB_RECURSE editor_source_files "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
-add_executable(${TARGET_NAME} ${sandbox_head_files} ${sandbox_source_files}  )
+add_executable(${TARGET_NAME} ${editor_head_files} ${editor_source_files}  )
 # add_dependencies(${TARGET_NAME}  Engine)
 
 target_link_libraries(${TARGET_NAME}  Engine)

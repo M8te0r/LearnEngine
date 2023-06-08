@@ -5,7 +5,6 @@
 #include "Kaleidoscope/Core/Application.h"
 namespace Kaleidoscope
 {
-    Scope<Input> Input::s_Instance = CreateScope<MacOSInput>();
 
     bool MacOSInput::IsKeyPressedImpl(int keycode)
     {

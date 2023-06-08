@@ -1,9 +1,12 @@
 #include "kldpch.h"
 #include "Platform/MacOS/MacOSWindow.h"
 
+#include "Kaleidoscope/Core/Input.h"
+
 #include "Kaleidoscope/Events/ApplicationEvent.h"
 #include "Kaleidoscope/Events/MouseEvent.h"
 #include "Kaleidoscope/Events/KeyEvent.h"
+
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Kaleidoscope
@@ -15,10 +18,7 @@ namespace Kaleidoscope
         KLD_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
-    Scope<Window> Window::Create(const WindowProps &props)
-    {
-        return CreateScope<MacOSWindow>(props);
-    }
+
 
     MacOSWindow::MacOSWindow(const WindowProps &props)
     {

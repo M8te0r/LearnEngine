@@ -1,7 +1,6 @@
 #pragma once
 #include "Engine.h"
 
-#include "ParticleSystem.h"
 
 class Sandbox2D : public Kaleidoscope::Layer
 {
@@ -21,17 +20,11 @@ private:
     // Temp
     Kaleidoscope::Ref<Kaleidoscope::VertexArray> m_SquareVA;
     Kaleidoscope::Ref<Kaleidoscope::Shader> m_FlatColorShader;
-    Kaleidoscope::Ref<Kaleidoscope::Framebuffer> m_Framebuffer;
 
     Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_CheckerboardTexture;
-    Kaleidoscope::Ref<Kaleidoscope::Texture2D> m_SpriteSheet;
-    Kaleidoscope::Ref<Kaleidoscope::SubTexture2D> m_TextureStairs, m_TextureBarrel, m_TextureTree;
 
     glm::vec4 m_SquareColor = {0.2f, 0.3f, 0.8f, 1.0f};
 
-    ParticleSystem m_ParticleSystem;
-    ParticleProps m_Particle;
 
-    uint32_t m_MapWidth, m_MapHeight;
-    std::unordered_map<char, Kaleidoscope::Ref<Kaleidoscope::SubTexture2D>> s_TextureMap;
+
 };

@@ -19,8 +19,10 @@ set(app_root_dir ${CMAKE_CURRENT_SOURCE_DIR})
 # set(3rd_root_dir ${app_root_dir}/3rdparty)
 set(engine_root_dir ${app_root_dir}/Engine)
 set(sandbox_root_dir ${app_root_dir}/Sandbox)
+set(editor_root_dir ${app_root_dir}/Editor)
 
 add_subdirectory(Engine)
 add_subdirectory(Sandbox)
+add_subdirectory(Editor)
 
 

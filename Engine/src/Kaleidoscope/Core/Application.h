@@ -16,7 +16,7 @@ namespace Kaleidoscope
     class Application
     {
     public:
-        Application();
+        Application(const std::string& name = "Kaleidoscope App");
         virtual ~Application();
         void Run();
 
