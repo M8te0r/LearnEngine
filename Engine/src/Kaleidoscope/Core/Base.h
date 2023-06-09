@@ -2,25 +2,14 @@
 
 #include <memory>
 
-#ifdef KLD_PLATFORM_WINDOWS
-#ifdef KLD_DYNAMIC_LINK
-#ifdef KLD_BUILD_DLL
-#define KLD_API ___declspec(dllexport)
-#else
-#define KLD_API ___declspec(dllimport)
-#endif
-#else
-#define KLD_API
-#endif
 
-#endif
 
 #ifdef KLD_PLATFORM_MACOS
-#define KLD_API
+
 
 #endif
 
-// 调试用
+// TODO: 需要支持KLD_ASSERT(x)也能用
 #ifdef KLD_ENABLE_ASSERTS
 #define KLD_ASSERT(x, ...)                                    \
     {                                                         \
