@@ -12,7 +12,7 @@
 
 #include "Kaleidoscope/Core/Input.h"
 #include "Kaleidoscope/Core/KeyCodes.h"
-#include "Kaleidoscope/Core/MouseButtonCodes.h"
+#include "Kaleidoscope/Core/MouseCodes.h"
 #include "Kaleidoscope/Renderer/OrthographicCameraController.h"
 
 #include "Kaleidoscope/ImGui/ImGuiLayer.h"

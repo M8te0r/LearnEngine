@@ -1,26 +1,26 @@
 #include "kldpch.h"
-#include "Platform/MacOS/MacOSInput.h"
+#include "Kaleidoscope/Core/Input.h"
 
 #include "GLFW/glfw3.h"
 #include "Kaleidoscope/Core/Application.h"
 namespace Kaleidoscope
 {
 
-    bool MacOSInput::IsKeyPressedImpl(int keycode)
+    bool Input::IsKeyPressed(KeyCode key)
     {
         auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().GetNativeWindow());
-        auto state = glfwGetKey(window, keycode);
+        auto state = glfwGetKey(window, static_cast<int32_t>(key));
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
-    bool MacOSInput::IsMouseButtonPressedImpl(int button)
+    bool Input::IsMouseButtonPressed(MouseCode button)
     {
         auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().GetNativeWindow());
-        auto state = glfwGetMouseButton(window, button);
+        auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));
         return state == GLFW_PRESS;
     }
 
-    std::pair<float, float> MacOSInput::GetMousePositionImpl()
+    std::pair<float, float> Input::GetMousePosition()
     {
         auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().GetNativeWindow());
         double xpos, ypos;
@@ -28,15 +28,15 @@ namespace Kaleidoscope
         return {(float)xpos, (float)ypos};
     }
 
-    float MacOSInput::GetMouseXImpl()
+    float Input::GetMouseX()
     {
-        auto [x, y] = GetMousePositionImpl(); // c++ 17语法
+        auto [x, y] = GetMousePosition(); // c++ 17语法
         return x;
     }
 
-    float MacOSInput::GetMouseYImpl()
+    float Input::GetMouseY()
     {
-        auto [x, y] = GetMousePositionImpl(); // c++ 17语法
+        auto [x, y] = GetMousePosition(); // c++ 17语法
         return y;
     }
 } // namespace Kaleidoscope
