@@ -15,13 +15,22 @@ namespace Kaleidoscope {
 	{
 		KLD_PROFILE_FUNCTION();
 
-		// m_CheckerboardTexture = Kaleidoscope::Texture2D::Create("/Users/crystalized/cpp_project/LearnEngine/Sandbox/assets/textures/Checkerboard.png");
-		m_CheckerboardTexture = Kaleidoscope::Texture2D::Create("../Editor/assets/textures/Checkerboard.png");
+		// m_CheckerboardTexture = Texture2D::Create("/Users/crystalized/cpp_project/LearnEngine/Sandbox/assets/textures/Checkerboard.png");
+		m_CheckerboardTexture = Texture2D::Create("../Editor/assets/textures/Checkerboard.png");
 
-		Kaleidoscope::FramebufferSpecification fbSpec;
+		FramebufferSpecification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
-		m_Framebuffer = Kaleidoscope::Framebuffer::Create(fbSpec);
+		m_Framebuffer = Framebuffer::Create(fbSpec);
+
+		// 激活场景
+		m_ActiveScene = CreateRef<Scene>();
+		auto square = m_ActiveScene->CreateEntity();//创建entity
+		m_ActiveScene->Reg().emplace<TransformComponent>(square);
+		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(square, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		m_SquareEntity = square;
+
 
 	}
 
@@ -30,7 +39,7 @@ namespace Kaleidoscope {
 		KLD_PROFILE_FUNCTION();
 	}
 
-	void EditorLayer::OnUpdate(Kaleidoscope::Timestep ts)
+	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		KLD_PROFILE_FUNCTION();
 
@@ -39,45 +48,29 @@ namespace Kaleidoscope {
 		{
 			m_CameraController.OnUpdate(ts);
 		}
+
+		
 		// Render
 		// Reset stats here
-		Kaleidoscope::Renderer2D::ResetStats();
-		{
-			KLD_PROFILE_SCOPE("Renderer Prep");
-			m_Framebuffer->Bind();
-			Kaleidoscope::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-			Kaleidoscope::RenderCommand::Clear();
-		}
+		Renderer2D::ResetStats();
+		m_Framebuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		RenderCommand::Clear();
+		
 
-		// 4个Quad
-		{
-			static float rotation = 0.0f;
-			rotation += ts * 50.0f;
-			KLD_PROFILE_SCOPE("Renderer Draw");
+		
+			
 
-			Kaleidoscope::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			Kaleidoscope::Renderer2D::DrawRotateQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
-			Kaleidoscope::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-			Kaleidoscope::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, m_SquareColor);
-			Kaleidoscope::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_CheckerboardTexture, 10.0f);
-			Kaleidoscope::Renderer2D::DrawRotateQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(rotation), m_CheckerboardTexture, 20.0f);
+		// Update Scene
+		m_ActiveScene->OnUpdate(ts);
 
-			Kaleidoscope::Renderer2D::EndScene();
+		Renderer2D::EndScene();
 
-			Kaleidoscope::Renderer2D::BeginScene(m_CameraController.GetCamera());
-			for (float y = -5.0f; y < 5.0f; y += 0.5f)
-			{
-				for (float x = -5.0f; x < 5.0f; x += 0.5f)
-				{
-					glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
-					Kaleidoscope::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
-				}
-			}
-			Kaleidoscope::Renderer2D::EndScene();
+			
 
-			m_Framebuffer->UnBind();
-		}
+		m_Framebuffer->UnBind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -160,7 +153,7 @@ namespace Kaleidoscope {
 				// which we can't undo at the moment without finer window depth/z control.
 				if (ImGui::MenuItem("Exit"))
 				{
-					Kaleidoscope::Application::Get().Close();
+					Application::Get().Close();
 				}
 				ImGui::EndMenu();
 			}
@@ -170,14 +163,15 @@ namespace Kaleidoscope {
 
 		// 属性操作视窗
 		ImGui::Begin("Settings");
-			auto stats = Kaleidoscope::Renderer2D::GetStats();
+			auto stats = Renderer2D::GetStats();
 			ImGui::Text("Renderer2D Stats:");
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 			ImGui::Text("Quads: %d", stats.QuadCount);
 			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-			ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
+			auto& sqaureColor = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Color;
+			ImGui::ColorEdit4("Square color", glm::value_ptr(sqaureColor));
 
 		ImGui::End();
 
@@ -206,7 +200,7 @@ namespace Kaleidoscope {
 
 	}
 
-	void EditorLayer::OnEvent(Kaleidoscope::Event& e)
+	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
 	}

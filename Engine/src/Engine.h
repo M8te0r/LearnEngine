@@ -17,6 +17,9 @@
 
 #include "Kaleidoscope/ImGui/ImGuiLayer.h"
 
+#include "Kaleidoscope/Scene/Scene.h"
+#include "Kaleidoscope/Scene/Components.h"
+
 // = = = = = = = Renderer相关 = = = = = = =
 #include "Kaleidoscope/Renderer/Renderer.h"
 #include "Kaleidoscope/Renderer/Renderer2D.h"

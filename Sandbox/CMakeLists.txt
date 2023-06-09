@@ -30,5 +30,7 @@ target_include_directories(
     ${engine_root_dir}/src
     ${engine_root_dir}/vendor/imgui
     ${engine_root_dir}/vendor/glm
+    ${engine_root_dir}/vendor/entt/include
+    
 
     )
