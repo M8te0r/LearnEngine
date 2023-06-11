@@ -4,19 +4,21 @@
 
 namespace Kaleidoscope
 {
+	class Entity;
+
 	class Scene 
 	{
 	public:
 		Scene();
 		~Scene();
 
-		entt::entity CreateEntity();
+		Entity CreateEntity(const std::string& name = std::string());
 
-		//temp
-		entt::registry& Reg() { return m_Registry; }
 
 		void OnUpdate(Timestep ts);
 	private:
 		entt::registry m_Registry;// registry是所有component和entity的容器
+
+		friend class Entity;
 	};
 }

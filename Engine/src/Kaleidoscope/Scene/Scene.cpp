@@ -6,6 +6,8 @@
 
 #include "glm/glm.hpp"
 
+#include "Kaleidoscope/Scene/Entity.h"
+
 namespace Kaleidoscope
 {
 
@@ -45,9 +47,14 @@ namespace Kaleidoscope
 
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return m_Registry.create();
+		Entity entity = { m_Registry.create() ,this };
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.Tag = name.empty() ? "Entity" : name;
+		
+		return entity;
 	}
 
 	void Scene::OnUpdate(Timestep ts)

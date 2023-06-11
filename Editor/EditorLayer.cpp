@@ -25,9 +25,10 @@ namespace Kaleidoscope {
 
 		// 激活场景
 		m_ActiveScene = CreateRef<Scene>();
-		auto square = m_ActiveScene->CreateEntity();//创建entity
-		m_ActiveScene->Reg().emplace<TransformComponent>(square);
-		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(square, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		//创建entity
+		auto square = m_ActiveScene->CreateEntity("Green Square");
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
 		m_SquareEntity = square;
 
@@ -170,8 +171,15 @@ namespace Kaleidoscope {
 			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-			auto& sqaureColor = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Color;
-			ImGui::ColorEdit4("Square color", glm::value_ptr(sqaureColor));
+			if (m_SquareEntity) 
+			{
+				ImGui::Separator();
+				ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
+				auto& sqaureColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+				ImGui::ColorEdit4("Square color", glm::value_ptr(sqaureColor));
+				ImGui::Separator();
+			}
+
 
 		ImGui::End();
 
