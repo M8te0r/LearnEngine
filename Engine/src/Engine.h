@@ -19,6 +19,7 @@
 
 #include "Kaleidoscope/Scene/Scene.h"
 #include "Kaleidoscope/Scene/Entity.h"
+#include "Kaleidoscope/Scene/ScriptableEntity.h"
 #include "Kaleidoscope/Scene/Components.h"
 
 // = = = = = = = Renderer相关 = = = = = = =

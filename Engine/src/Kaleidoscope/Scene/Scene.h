@@ -1,5 +1,7 @@
 #pragma once
+
 #include "entt.hpp"
+
 #include "Kaleidoscope/Core/Timestep.h"
 
 namespace Kaleidoscope
@@ -23,6 +25,6 @@ namespace Kaleidoscope
 
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
-		friend class Entity;
+		friend class Entity;// Entity是Scene的友元类，Scene可以使用Entity的成员函数
 	};
 }
