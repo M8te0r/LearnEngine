@@ -147,7 +147,7 @@ namespace Kaleidoscope
     #define KLD_PROFILE_BEGIN_SESSION(name, filepath) ::Kaleidoscope::Instrumentor::Get().BeginSession(name, filepath)
     #define KLD_PROFILE_END_SESSION() ::Kaleidoscope::Instrumentor::Get().EndSession()
     #define KLD_PROFILE_SCOPE(name) ::Kaleidoscope::InstrumentationTimer timer##__LINE__(name)
-    #ifdef __WIN32__
+    #ifdef _WIN32
         #define KLD_PROFILE_FUNCTION() KLD_PROFILE_SCOPE(__FUNCSIG__)
     #elif __linux__ || __APPLE__
         #define KLD_PROFILE_FUNCTION() KLD_PROFILE_SCOPE(__PRETTY_FUNCTION__)

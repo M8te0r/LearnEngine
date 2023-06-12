@@ -32,6 +32,14 @@ namespace Kaleidoscope {
 
 		m_SquareEntity = square;
 
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+
+		
+
+		m_SecondCamera = m_ActiveScene->CreateEntity("Clip-Space Entity");
+		auto& cc = m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		cc.Primary = false;
 
 	}
 
@@ -43,6 +51,18 @@ namespace Kaleidoscope {
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		KLD_PROFILE_FUNCTION();
+
+		// Resize
+		if (
+			FramebufferSpecification spec = m_Framebuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && 
+			m_ViewportSize.y > 0.0f && 
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)
+			) 
+		{
+			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+		}
 
 		// Update
 		if (m_ViewportFocused) 
@@ -57,12 +77,8 @@ namespace Kaleidoscope {
 		m_Framebuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
-		
 
-		
-			
-
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
+		//Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		// Update Scene
 		m_ActiveScene->OnUpdate(ts);
@@ -77,10 +93,6 @@ namespace Kaleidoscope {
 	void EditorLayer::OnImGuiRender()
 	{
 		KLD_PROFILE_FUNCTION();
-
-
-
-
 
 		// If you strip some features of, this demo is pretty much equivalent to calling DockSpaceOverViewport()!
 		// In most cases you should be able to just call DockSpaceOverViewport() and ignore all the code below!
@@ -180,6 +192,15 @@ namespace Kaleidoscope {
 				ImGui::Separator();
 			}
 
+			ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
+
+			if (ImGui::Checkbox("Camera A", &m_PrimaryCamera)) 
+			{
+				m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
+				m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+			}
+			
+
 
 		ImGui::End();
 
@@ -191,13 +212,8 @@ namespace Kaleidoscope {
 				Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
 				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-				if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0) 
-				{
-					m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-					m_ViewportSize = { viewportPanelSize.x,viewportPanelSize.y };
+				m_ViewportSize = { viewportPanelSize.x,viewportPanelSize.y };
 
-					m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
-				}
 				uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 				ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 			ImGui::End();

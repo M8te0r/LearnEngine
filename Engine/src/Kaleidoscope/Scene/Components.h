@@ -1,5 +1,6 @@
 #pragma once
 #include "glm/glm.hpp"
+#include "Kaleidoscope/Renderer/Camera.h"
 
 
 namespace Kaleidoscope 
@@ -35,5 +36,17 @@ namespace Kaleidoscope
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			:Color(color) {}
+	};
+
+	struct CameraComponent
+	{
+		Camera Camera;
+		// 是否是主摄像头
+		bool Primary = true;//TODO: 这个属性需要迁移至Scene中来管理
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& projection)
+			:Camera(projection) {}
 	};
 }
