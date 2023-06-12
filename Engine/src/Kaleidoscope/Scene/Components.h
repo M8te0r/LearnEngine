@@ -1,6 +1,6 @@
 #pragma once
 #include "glm/glm.hpp"
-#include "Kaleidoscope/Renderer/Camera.h"
+#include "Kaleidoscope/Scene/SceneCamera.h"
 
 
 namespace Kaleidoscope 
@@ -40,13 +40,12 @@ namespace Kaleidoscope
 
 	struct CameraComponent
 	{
-		Camera Camera;
+		SceneCamera Camera;
 		// 是否是主摄像头
 		bool Primary = true;//TODO: 这个属性需要迁移至Scene中来管理
+		bool FixedAspectRatio = false;//是否固定高宽比决定了这个camera更新的方式
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& projection)
-			:Camera(projection) {}
 	};
 }
