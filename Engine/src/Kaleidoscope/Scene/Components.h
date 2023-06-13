@@ -60,23 +60,16 @@ namespace Kaleidoscope
 	{
 		ScriptableEntity* Instance = nullptr;
 
-		std::function<void()>InstantiateFunction;
-		std::function<void()>DestroyInstanceFunction;
+		ScriptableEntity* (*InstantiateScript)();//函数指针
+		void (*DestroyScript)(NativeScriptComponent*);//函数指针
 
-		std::function<void(ScriptableEntity*)>OnCreateFunction;
-		std::function<void(ScriptableEntity*)>OnDestroyFunction;
-		std::function<void(ScriptableEntity*, Timestep)>OnUpdateFunction;
 
 		template<typename T>
 		void Bind()
 		{
-			InstantiateFunction = [&]() {Instance = new T(); };
-			DestroyInstanceFunction = [&]() {delete (T*)Instance; Instance = nullptr; };
+			InstantiateScript = []() {return static_cast<ScriptableEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* nsc) {delete nsc->Instance; nsc->Instance = nullptr; };
 
-			// FIXME: 若[]中不添加this，vs2022会报错“当前默认的捕获模式不允许捕获this”
-			OnCreateFunction = [this](ScriptableEntity* instance) {((T*)Instance)->OnCreate(); };
-			OnDestroyFunction = [this](ScriptableEntity* instance) {((T*)Instance)->OnDestroy(); };
-			OnUpdateFunction = [this](ScriptableEntity* instance, Timestep ts) {((T*)Instance)->OnUpdate(ts); };
 		}
 	};
 }

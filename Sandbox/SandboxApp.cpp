@@ -3,7 +3,6 @@
 
 #include "Kaleidoscope/Core/EntryPoint.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
 
 #include "imgui.h"
 
@@ -227,7 +226,7 @@ public:
     }
 };
 
-Kaleidoscope::Application *Kaleidoscope::CreateApplication()
+Kaleidoscope::Application* Kaleidoscope::CreateApplication()
 {
-    return new Sandbox();
+	return new Sandbox();
 }

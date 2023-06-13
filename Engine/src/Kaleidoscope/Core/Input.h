@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Kaleidoscope/Core/Base.h"
+#include "glm/glm.hpp"
 #include "Kaleidoscope/Core/KeyCodes.h"
 #include "Kaleidoscope/Core/MouseCodes.h"
 
@@ -13,7 +13,7 @@ namespace Kaleidoscope
 		static bool IsKeyPressed(KeyCode key);
 
 		static bool IsMouseButtonPressed(MouseCode  button);
-		static std::pair<float, float> GetMousePosition();
+		static glm::vec2 GetMousePosition();
 		static float GetMouseX();
 		static float GetMouseY();
 

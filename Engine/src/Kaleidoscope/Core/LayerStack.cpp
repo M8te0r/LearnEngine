@@ -3,9 +3,6 @@
 
 namespace Kaleidoscope
 {
-    LayerStack::LayerStack()
-    {
-    }
 
     LayerStack::~LayerStack()
     {

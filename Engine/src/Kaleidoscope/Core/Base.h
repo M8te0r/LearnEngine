@@ -2,12 +2,9 @@
 
 #include <memory>
 
+#include "Kaleidoscope/Core/PlatformDetection.h"
 
 
-#ifdef KLD_PLATFORM_MACOS
-
-
-#endif
 
 // TODO: 需要支持KLD_ASSERT(x)也能用
 #ifdef KLD_ENABLE_ASSERTS

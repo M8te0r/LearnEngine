@@ -21,6 +21,11 @@
 
 #include <thread>
 
+#include <mutex>
+#include <sstream>
+
+#include "Kaleidoscope/Core/Log.h"
+
 namespace Kaleidoscope
 {
 

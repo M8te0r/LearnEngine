@@ -100,8 +100,7 @@ namespace Kaleidoscope
         s_Data.TextureShader->Bind();
         s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
-        // 将某一块内存中的内容全部设置0
-
+        // 将 第一个 texture slot 置为 0
         s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
         s_Data.QuadVertexPositions[0] = {-0.5f, -0.5f, 0.0f, 1.0f};
@@ -206,7 +205,7 @@ namespace Kaleidoscope
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
-        DrawQuad(transform, texture, tilingFactor);
+        DrawQuad(transform, texture, tilingFactor,tintColor);
     }
 
     void Renderer2D::DrawRotateQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color)
@@ -286,7 +285,7 @@ namespace Kaleidoscope
         for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
         {
             // 遍历所有的slot，比较当前slot中texture的指针是否与参数指针相同
-            if (*s_Data.TextureSlots[i].get() == *texture.get())
+            if (*s_Data.TextureSlots[i] == *texture)
             {
                 textureIndex = (float)i;
                 break;

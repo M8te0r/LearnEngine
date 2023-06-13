@@ -1,6 +1,5 @@
 #include "kldpch.h"
 #include "Kaleidoscope/Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 #include "Kaleidoscope/Renderer/Renderer2D.h"
 
 namespace Kaleidoscope

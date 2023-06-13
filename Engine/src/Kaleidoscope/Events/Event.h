@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Kaleidoscope/Core/Base.h"
 #include <functional>
+#include "Kaleidoscope/Debug/Instrumentor.h"
+#include "Kaleidoscope/Core/Base.h"
 
 namespace Kaleidoscope
 {

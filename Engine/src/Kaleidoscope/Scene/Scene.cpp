@@ -11,35 +11,10 @@
 namespace Kaleidoscope
 {
 
-	static void DoMath(const glm::mat4& transform)
-	{
-
-	}
 
 	Scene::Scene()
 	{
-#if ENTT_EXAMPLE_CODE
-		entt::entity entity = m_Registry.create();//entity是一个uint_32的编号
 
-		m_Registry.emplace<TransformComponent>(entity, glm::mat4(1.0));
-
-		
-		if(m_Registry.all_of<TransformComponent>(entity))
-		TransformComponent& transform = m_Registry.get<TransformComponent>(entity);
-
-
-		auto view = m_Registry.view<TransformComponent>();
-		for (auto entity : view) 
-		{
-			TransformComponent& transform = view.get<TransformComponent>(entity);
-		}
-
-		auto group = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
-		for (auto entity : group)
-		{
-			auto& [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
-		}
-#endif
 	}
 
 	Scene::~Scene()
@@ -51,7 +26,7 @@ namespace Kaleidoscope
 	{
 		Entity entity = { m_Registry.create() ,this };
 		entity.AddComponent<TransformComponent>();
-		auto& tag = entity.AddComponent<TagComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();//确保使用auto& 不然值拷贝无法动态改变TagComponent本体
 		tag.Tag = name.empty() ? "Entity" : name;
 		
 		return entity;
@@ -61,16 +36,17 @@ namespace Kaleidoscope
 	{
 		// Update scripts
 		{
+			// TODO: 需要迁移至Scene::OnScenePlay
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 			{
 				if (!nsc.Instance) 
 				{
-					nsc.InstantiateFunction();
+					nsc.Instance = nsc.InstantiateScript();
 					nsc.Instance->m_Entity = Entity{ entity,this };
-					nsc.OnCreateFunction(nsc.Instance);
+					nsc.Instance->OnCreate();
 				}
 
-				nsc.OnUpdateFunction(nsc.Instance, ts);
+				nsc.Instance->OnUpdate(ts);
 
 			});
 		}
@@ -82,7 +58,7 @@ namespace Kaleidoscope
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view)
 			{
-				auto& [transform,camera] = view.get<TransformComponent,CameraComponent>(entity);
+				auto [transform,camera] = view.get<TransformComponent,CameraComponent>(entity);
 
 				if (camera.Primary)
 				{
@@ -101,7 +77,7 @@ namespace Kaleidoscope
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
-				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 				Renderer2D::DrawQuad(transform, sprite.Color);
 			}
 
