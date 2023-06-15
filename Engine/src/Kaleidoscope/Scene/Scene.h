@@ -25,6 +25,7 @@ namespace Kaleidoscope
 
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
-		friend class Entity;// Entity是Scene的友元类，Scene可以使用Entity的成员函数
+		friend class Entity;// Entity是Scene的友元类，Entity可以使用Scene的成员函数
+		friend class SceneHierarchyPanel;// SceneHierarchyPanel是Scene的友元类，SceneHierarchyPanel可以使用Scene的成员函数
 	};
 }

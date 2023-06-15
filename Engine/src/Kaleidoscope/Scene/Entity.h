@@ -31,7 +31,8 @@ namespace Kaleidoscope
 		template<typename T>
 		bool HasComponent() 
 		{
-			return m_Scene->m_Registry.has<T>(m_EntityHandle);
+			// entt不再支持has<T>()，修改为all_of<T>() 
+			return m_Scene->m_Registry.all_of<T>(m_EntityHandle);
 		}
 
 		template<typename T>
@@ -42,7 +43,14 @@ namespace Kaleidoscope
 			m_Scene->m_Registry.remove<T>(m_EntityHandle);
 		}
 
+		// 当对entity做比较时if(entity)，会返回下面的结果
 		operator bool() const { return m_EntityHandle != entt::null; }
+		// 当对entity做强制类型转换(uint32_t)entity时，会返回下面的结果
+		operator uint32_t() const { return (uint32_t)m_EntityHandle; } 
+		// 当对entity做比较时 entity1 == entity2，会返回下面的结果
+		bool operator==(const Entity& other) const { return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene; }
+		// 当对entity做比较时 entity1 != entity2，会返回下面的结果
+		bool operator!=(const Entity& other) const { return !(*this == other); }
 	private:
 		entt::entity m_EntityHandle = entt::null;
 		Scene* m_Scene = nullptr;

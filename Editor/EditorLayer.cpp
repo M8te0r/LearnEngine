@@ -77,8 +77,10 @@ namespace Kaleidoscope {
 			}
 		};
 
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -212,6 +214,9 @@ namespace Kaleidoscope {
 
 			ImGui::EndMenuBar();
 		}
+
+		// 实体层级视窗
+		m_SceneHierarchyPanel.OnImGuiRender();
 
 		// 属性操作视窗
 		ImGui::Begin("Settings");

@@ -25,7 +25,7 @@ target_precompile_headers(
 target_include_directories(
     ${TARGET_NAME} 
     PRIVATE
-    ${sandbox_root_dir}
+    ${editor_root_dir}
     # ${app_root_dir}
     ${engine_root_dir}/src
     ${engine_root_dir}/vendor/imgui
