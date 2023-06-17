@@ -2,8 +2,12 @@
 #include <memory>
 
 #include "Kaleidoscope/Core/Base.h"
+
+// 忽略外部头文件产生的警告
+#pragma warning(push, 0)
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
+#pragma warning(pop)
 
 namespace Kaleidoscope
 {

@@ -127,6 +127,8 @@ namespace Kaleidoscope
         s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
         s_Data.TextureSlotIndex = 1;
+
+        StartBatch();
     }
 
     void Renderer2D::BeginScene(const OrthographicCamera &camera)
@@ -140,6 +142,8 @@ namespace Kaleidoscope
         s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
         s_Data.TextureSlotIndex = 1;
+
+        StartBatch();
     }
 
     
@@ -148,18 +152,27 @@ namespace Kaleidoscope
     {
         KLD_PROFILE_FUNCTION();
 
-        uint32_t dataSize = (uint8_t *)s_Data.QuadVertexBufferPtr - (uint8_t *)s_Data.QuadVertexBufferBase;
-        s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
-
         Flush();
     }
 
+    void Renderer2D::StartBatch()
+	{
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+	}
+
     void Renderer2D::Flush()
     {
+
+        uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
+		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+
         // 绑定纹理
-        for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
         {
-            s_Data.TextureSlots[i]->Bind(i);
+			s_Data.TextureSlots[i]->Bind(i);
         }
 
         RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
@@ -167,14 +180,11 @@ namespace Kaleidoscope
         s_Data.Stats.DrawCalls++;
     }
 
-    void Renderer2D::FlushAndReset()
+    void Renderer2D::NextBatch()
     {
 
-        EndScene();
-        s_Data.QuadIndexCount = 0;
-        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-        s_Data.TextureSlotIndex = 1;
+        Flush();
+		StartBatch();
     }
 
     void Renderer2D::DrawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color)
@@ -247,7 +257,7 @@ namespace Kaleidoscope
 
         if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
         {
-            FlushAndReset();
+            NextBatch();
         }
 
 
@@ -276,7 +286,7 @@ namespace Kaleidoscope
 
         if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
         {
-            FlushAndReset();
+            NextBatch();
         }
 
         float textureIndex = 0.0f;
@@ -296,7 +306,7 @@ namespace Kaleidoscope
         {
             if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
             {
-                FlushAndReset();
+                NextBatch();
             }
             textureIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;

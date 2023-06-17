@@ -4,10 +4,11 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-namespace Kaleidoscope {
+namespace Kaleidoscope
+{
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
+		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.f), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
 	{
 	}
 
@@ -26,57 +27,54 @@ namespace Kaleidoscope {
 		// 激活场景
 		m_ActiveScene = CreateRef<Scene>();
 
-		//创建entity
+		// 创建entity
 		auto square = m_ActiveScene->CreateEntity("Green Square");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
 
 		auto redSquare = m_ActiveScene->CreateEntity("Red Square");
-		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{1.0f, 0.0f, 0.0f, 1.0f});
 
 		m_SquareEntity = square;
 
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera A");
 		m_CameraEntity.AddComponent<CameraComponent>();
 
-		m_SecondCamera = m_ActiveScene->CreateEntity("Clip-Space Entity");
-		auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
+		m_SecondCamera = m_ActiveScene->CreateEntity("Camera B");
+		auto &cc = m_SecondCamera.AddComponent<CameraComponent>();
 		cc.Primary = false;
 
-		class CameraController :public ScriptableEntity 
+		class CameraController : public ScriptableEntity
 		{
 		public:
-			void OnCreate() 
+			void OnCreate()
 			{
-
 			}
 
-			void OnDestroy() 
+			void OnDestroy()
 			{
-
 			}
 
-			void OnUpdate(Timestep ts) 
+			void OnUpdate(Timestep ts)
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto &tanslation = GetComponent<TransformComponent>().Translation;
 				float speed = 5.0f;
 
-				if (Input::IsKeyPressed(Key::A)) 
+				if (Input::IsKeyPressed(Key::A))
 				{
-					transform[3][0] -= speed * ts;
+					tanslation.x -= speed * ts;
 				}
 				if (Input::IsKeyPressed(Key::D))
 				{
-					transform[3][0] += speed * ts;
+					tanslation.x += speed * ts;
 				}
 				if (Input::IsKeyPressed(Key::W))
 				{
-					transform[3][1] += speed * ts;
+					tanslation.y += speed * ts;
 				}
 				if (Input::IsKeyPressed(Key::S))
 				{
-					transform[3][1] -= speed * ts;
+					tanslation.y -= speed * ts;
 				}
-
 			}
 		};
 
@@ -98,10 +96,9 @@ namespace Kaleidoscope {
 		// Resize
 		if (
 			FramebufferSpecification spec = m_Framebuffer->GetSpecification();
-			m_ViewportSize.x > 0.0f && 
-			m_ViewportSize.y > 0.0f && 
-			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)
-			) 
+			m_ViewportSize.x > 0.0f &&
+			m_ViewportSize.y > 0.0f &&
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
@@ -109,27 +106,24 @@ namespace Kaleidoscope {
 		}
 
 		// Update
-		if (m_ViewportFocused) 
+		if (m_ViewportFocused)
 		{
 			m_CameraController.OnUpdate(ts);
 		}
 
-		
 		// Render
 		// Reset stats here
 		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
 		RenderCommand::Clear();
 
-		//Renderer2D::BeginScene(m_CameraController.GetCamera());
+		// Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		// Update Scene
 		m_ActiveScene->OnUpdate(ts);
 
 		Renderer2D::EndScene();
-
-			
 
 		m_Framebuffer->UnBind();
 	}
@@ -161,7 +155,7 @@ namespace Kaleidoscope {
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		if (opt_fullscreen)
 		{
-			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			const ImGuiViewport *viewport = ImGui::GetMainViewport();
 			ImGui::SetNextWindowPos(viewport->WorkPos);
 			ImGui::SetNextWindowSize(viewport->WorkSize);
 			ImGui::SetNextWindowViewport(viewport->ID);
@@ -195,7 +189,7 @@ namespace Kaleidoscope {
 			ImGui::PopStyleVar(2);
 
 		// Submit the DockSpace
-		ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO &io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -222,66 +216,36 @@ namespace Kaleidoscope {
 		m_SceneHierarchyPanel.OnImGuiRender();
 
 		// 属性操作视窗
-		ImGui::Begin("Settings");
-			auto stats = Renderer2D::GetStats();
-			ImGui::Text("Renderer2D Stats:");
-			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-			ImGui::Text("Quads: %d", stats.QuadCount);
-			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-			if (m_SquareEntity) 
-			{
-				ImGui::Separator();
-				ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
-				auto& sqaureColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
-				ImGui::ColorEdit4("Square color", glm::value_ptr(sqaureColor));
-				ImGui::Separator();
-			}
-
-			ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
-
-			if (ImGui::Checkbox("Camera A", &m_PrimaryCamera)) 
-			{
-				m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
-				m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-			}
-
-			{
-				auto& camera = m_SecondCamera.GetComponent<CameraComponent>().Camera;
-				float orthoSize = camera.GetOrthographicSize();
-				if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize)) 
-				{
-					camera.SetOrthographicSize(orthoSize);
-				}
-
-			}
-			
-
+		ImGui::Begin("Stats");
+		auto stats = Renderer2D::GetStats();
+		ImGui::Text("Renderer2D Stats:");
+		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+		ImGui::Text("Quads: %d", stats.QuadCount);
+		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
 		ImGui::End();
 
 		// viewport视窗
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
-			ImGui::Begin("Viewport");
-				m_ViewportFocused = ImGui::IsWindowFocused();
-				m_ViewportHovered = ImGui::IsWindowHovered();
-				Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
+		ImGui::Begin("Viewport");
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
-				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-				m_ViewportSize = { viewportPanelSize.x,viewportPanelSize.y };
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
 
-				uint64_t  textureID = m_Framebuffer->GetColorAttachmentRendererID();
-				ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-			ImGui::End();
+		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
+		ImGui::End();
 		ImGui::PopStyleVar();
 
 		// 结束docking模式
 		ImGui::End();
-
 	}
 
-	void EditorLayer::OnEvent(Event& e)
+	void EditorLayer::OnEvent(Event &e)
 	{
 		m_CameraController.OnEvent(e);
 	}

@@ -108,7 +108,7 @@ namespace Kaleidoscope
         // BufferLayout 封装了设置vertexbuffer和indexbuffer的参数的方法（eg. glBufferData())
     public:
         BufferLayout() {}
-        BufferLayout(const std::initializer_list<BufferElement> &elements)
+        BufferLayout(std::initializer_list<BufferElement> elements)
             : m_Elements(elements)
         {
             CaculateOffsetsAndStride();
