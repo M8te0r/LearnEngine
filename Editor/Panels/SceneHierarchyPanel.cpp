@@ -34,6 +34,19 @@ namespace Kaleidoscope
 			m_SelectionContext = {};
 		}
 
+		// 右键点击空白区域时弹出弹窗
+		if (ImGui::BeginPopupContextWindow(0, 1| ImGuiPopupFlags_NoOpenOverItems))
+		{
+			if (ImGui::MenuItem("Create Empty Entity"))
+			{
+				m_Context->CreateEntity("Empty Entity");
+			}
+			ImGui::EndPopup();
+
+		}
+
+
+
 		ImGui::End();
 
 		ImGui::Begin("Properties");
@@ -41,6 +54,28 @@ namespace Kaleidoscope
 		{
 			// 如果选中了某个entity，则显示这个entity的属性
 			DrawComponents(m_SelectionContext);
+
+			// 一个创建component按钮
+			if (ImGui::Button("Add Component")) 
+			{
+				ImGui::OpenPopup("AddComponent");
+			}
+
+			if (ImGui::BeginPopup("AddComponent"))
+			{
+				if (ImGui::MenuItem("Camera")) 
+				{
+					m_SelectionContext.AddComponent<CameraComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::MenuItem("Sprite Renderer"))
+				{
+					m_SelectionContext.AddComponent<SpriteRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 		}
 		ImGui::End();
 	}
@@ -58,6 +93,17 @@ namespace Kaleidoscope
 			m_SelectionContext = entity;
 		}
 
+		bool entityDeleted = false; // 设置标记
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
+			{
+				entityDeleted = true;
+			}
+			ImGui::EndPopup();
+
+		}
+
 		if (opened)
 		{
 			// 1：当没有选中的物体时，选中当前， 2：点击箭头时展开
@@ -68,6 +114,16 @@ namespace Kaleidoscope
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
+		}
+
+		// 延迟删除
+		if (entityDeleted) 
+		{
+			m_Context->DestroyEntity(entity);
+			if (m_SelectionContext == entity) 
+			{
+				m_SelectionContext = {};// 如果当前选中了这个entity，则清空选中
+			}
 		}
 	}
 
@@ -144,8 +200,8 @@ namespace Kaleidoscope
 
 			char buffer[256];				   // 局部缓冲，用于接受InputBox输入
 			memset(buffer, 0, sizeof(buffer)); // 设置buffer的所有内容为0
-			// strcpy_s(buffer, sizeof(buffer), tag.c_str()); // 对于安全拷贝，strcpy_s是windows系统特有的版本
-			// strlcpy(buffer, tag.c_str(), sizeof(buffer)); // strlcpy是MacOS支持的版本
+			// strcpy_s(buffer, sizeof(buffer), tag.c_str()); // 安全拷贝，strcpy_s是windows系统特有的版本
+			// strlcpy(buffer, tag.c_str(), sizeof(buffer)); // 安全拷贝，strlcpy是MacOS支持的版本
 			strcpy(buffer, tag.c_str()); // buffer设置初值
 
 			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
@@ -154,10 +210,14 @@ namespace Kaleidoscope
 			}
 		}
 
+		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
+
 		if (entity.HasComponent<TransformComponent>())
 		{
+			bool open = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, "Transform");
+			
 
-			if (ImGui::TreeNodeEx((void *)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			if (open)
 			{
 				auto &tc = entity.GetComponent<TransformComponent>();
 				DrawVec3Control("Translation", tc.Translation);
@@ -167,12 +227,14 @@ namespace Kaleidoscope
 				DrawVec3Control("Scale", tc.Scale, 1.0);
 				ImGui::TreePop();
 			}
+
+			
 		}
 
 		if (entity.HasComponent<CameraComponent>())
 		{
 
-			if (ImGui::TreeNodeEx((void *)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			if (ImGui::TreeNodeEx((void *)typeid(CameraComponent).hash_code(), treeNodeFlags, "Camera"))
 			{
 				auto &cameraComponent = entity.GetComponent<CameraComponent>();
 				auto &camera = cameraComponent.Camera;
@@ -252,12 +314,38 @@ namespace Kaleidoscope
 
 		if (entity.HasComponent<SpriteRendererComponent>())
 		{
-			if (ImGui::TreeNodeEx((void *)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4,4 });
+			bool open = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), treeNodeFlags, "Sprite Renderer");
+
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button("+", ImVec2{ 20,20 })) 
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					removeComponent = true;
+				}
+				ImGui::EndPopup();
+			}
+
+
+			if (open)
 			{
 				auto &src = entity.GetComponent<SpriteRendererComponent>();
 				ImGui::ColorEdit4("Color", glm::value_ptr(src.Color));
 
 				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				entity.RemoveComponent<SpriteRendererComponent>();
 			}
 		}
 	}

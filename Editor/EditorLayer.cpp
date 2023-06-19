@@ -8,7 +8,7 @@ namespace Kaleidoscope
 {
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.f), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
+		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SquareColor({0.2f, 0.3f, 0.8f, 1.0f})
 	{
 	}
 
@@ -48,6 +48,8 @@ namespace Kaleidoscope
 		public:
 			void OnCreate()
 			{
+				auto& translation = GetComponent<TransformComponent>().Translation;
+				translation.x = rand() % 10 - 5.0f;
 			}
 
 			void OnDestroy()
@@ -122,8 +124,6 @@ namespace Kaleidoscope
 
 		// Update Scene
 		m_ActiveScene->OnUpdate(ts);
-
-		Renderer2D::EndScene();
 
 		m_Framebuffer->UnBind();
 	}
