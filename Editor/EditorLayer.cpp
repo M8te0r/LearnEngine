@@ -190,11 +190,17 @@ namespace Kaleidoscope
 
 		// Submit the DockSpace
 		ImGuiIO &io = ImGui::GetIO();
+		ImGuiStyle& style = ImGui::GetStyle();
+		float minWinSizeX = style.WindowMinSize.x;
+		style.WindowMinSize.x = 370.0f;//设置docking窗口的最小宽度
+
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
+
+		style.WindowMinSize.x = minWinSizeX;//设置docking窗口的最小宽度
 
 		if (ImGui::BeginMenuBar())
 		{
@@ -236,6 +242,7 @@ namespace Kaleidoscope
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
 
+		// TODO: 这里有问题，删除了entity后依然会显示最后一次的framebuffer
 		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
 		ImGui::End();
