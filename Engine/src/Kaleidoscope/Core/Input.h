@@ -17,8 +17,6 @@ namespace Kaleidoscope
 		static float GetMouseX();
 		static float GetMouseY();
 
-
-	
 	};
 
 } // namespace Kaleidoscope

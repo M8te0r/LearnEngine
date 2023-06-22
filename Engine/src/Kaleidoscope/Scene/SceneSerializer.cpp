@@ -243,7 +243,9 @@ namespace Kaleidoscope
 				{
 					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
 
-					auto& cameraProps = cameraComponent["Camera"];
+					// 不需要使用auto&
+					// https://stackoverflow.com/questions/28155405/invalid-initialization-of-non-const-reference-of-type-yamlnode-from-an-rval
+					auto cameraProps = cameraComponent["Camera"];
 					cc.Camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					cc.Camera.SetPerspectiveVerticalFOV(cameraProps["PerspectiveFOV"].as<float>());

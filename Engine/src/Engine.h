@@ -1,7 +1,7 @@
 #pragma once
 
 // 设置当前平台为macos
-#define KLD_PLATFORM_MACOS
+//#define KLD_PLATFORM_MACOS
 
 // 用于Sandbox测试引用的头文件
 #include "Kaleidoscope/Core/Application.h"

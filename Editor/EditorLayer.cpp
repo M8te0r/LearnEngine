@@ -6,6 +6,8 @@
 
 #include "Kaleidoscope/Scene/SceneSerializer.h"
 
+#include "Kaleidoscope/Utils/PlatformUtils.h"
+
 namespace Kaleidoscope
 {
 
@@ -216,18 +218,38 @@ namespace Kaleidoscope
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
 				// which we can't undo at the moment without finer window depth/z control.
 
-				if (ImGui::MenuItem("Serialize"))
+				if (ImGui::MenuItem("New", "Ctrl+N")) 
 				{
-					// 序列化当前场景
-					SceneSerializer serializer(m_ActiveScene);
-					serializer.Serialize("../Editor/assets/scenes/Example.kld");
+					m_ActiveScene = CreateRef<Scene>();
+					m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+					m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 				}
 
-				if (ImGui::MenuItem("Deserialize"))
+				if (ImGui::MenuItem("Open...", "Ctrl+O")) 
 				{
-					// 反序列化已经保存的场景
-					SceneSerializer serializer(m_ActiveScene);
-					serializer.Deserialize("../Editor/assets/scenes/Example.kld");
+					std::string filepath = FileDialogs::OpenFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+					if (!filepath.empty())
+					{
+						m_ActiveScene = CreateRef<Scene>();
+						m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+						m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+						// 序列化当前场景	
+						SceneSerializer serializer(m_ActiveScene);
+						serializer.Deserialize("filepath");
+					}
+
+				}
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shifit+S")) 
+				{
+					std::string filepath = FileDialogs::SaveFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+					if (!filepath.empty()) 
+					{
+						// 反序列化已经保存的场景
+						SceneSerializer serializer(m_ActiveScene);
+						serializer.Serialize(filepath);
+					}
 				}
 
 

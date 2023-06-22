@@ -42,7 +42,7 @@ target_compile_definitions(
     ${LIB_NAME}  
     PRIVATE
      # 因为macos没有dllexport方法，动态库一旦生成，无法通过sandbox中的宏改变动态库的信息。所以在生成动态库时就需要定义好宏
-    "KLD_PLATFORM_MACOS"
+    #"KLD_PLATFORM_MACOS"
     "GLFW_INCLUDE_NONE"
     
     )
