@@ -70,7 +70,8 @@ target_include_directories(stb_image PUBLIC ${stb_image_root_dir} )
 # target_include_directories(imgui PUBLIC ${OPENGL_INCLUDE_DIR})
 
 
-
+# yaml
+add_subdirectory(yaml-cpp)
 
 
 

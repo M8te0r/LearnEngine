@@ -113,7 +113,11 @@ namespace Kaleidoscope
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
-		static_assert(false);
+		// 成员模板方法OnComponentAdded()的实现必须指定typename T,
+		// 如果在当前这个函数实现(即没有指定T)，报错退出
+
+		// static_assert(false);// MacOS不能有这一行代码，他是在运行时链接模板的
+								// Windows不需要这一行代码，他是在编译时链接的
 	}
 
 	template<>

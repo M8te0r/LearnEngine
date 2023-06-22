@@ -4,6 +4,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "Kaleidoscope/Scene/SceneSerializer.h"
+
 namespace Kaleidoscope
 {
 
@@ -27,6 +29,7 @@ namespace Kaleidoscope
 		// 激活场景
 		m_ActiveScene = CreateRef<Scene>();
 
+#if 0
 		// 创建entity
 		auto square = m_ActiveScene->CreateEntity("Green Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
@@ -83,7 +86,11 @@ namespace Kaleidoscope
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
+#endif
+
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		
 	}
 
 	void EditorLayer::OnDetach()
@@ -208,6 +215,22 @@ namespace Kaleidoscope
 			{
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
 				// which we can't undo at the moment without finer window depth/z control.
+
+				if (ImGui::MenuItem("Serialize"))
+				{
+					// 序列化当前场景
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Serialize("../Editor/assets/scenes/Example.kld");
+				}
+
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					// 反序列化已经保存的场景
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Deserialize("../Editor/assets/scenes/Example.kld");
+				}
+
+
 				if (ImGui::MenuItem("Exit"))
 				{
 					Application::Get().Close();
