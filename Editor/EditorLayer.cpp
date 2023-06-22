@@ -220,36 +220,18 @@ namespace Kaleidoscope
 
 				if (ImGui::MenuItem("New", "Ctrl+N")) 
 				{
-					m_ActiveScene = CreateRef<Scene>();
-					m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-					m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+					NewScene();
 				}
 
 				if (ImGui::MenuItem("Open...", "Ctrl+O")) 
 				{
-					std::string filepath = FileDialogs::OpenFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
-					if (!filepath.empty())
-					{
-						m_ActiveScene = CreateRef<Scene>();
-						m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-						m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-						// 序列化当前场景	
-						SceneSerializer serializer(m_ActiveScene);
-						serializer.Deserialize("filepath");
-					}
+					OpenScene();
 
 				}
 
 				if (ImGui::MenuItem("Save As...", "Ctrl+Shifit+S")) 
 				{
-					std::string filepath = FileDialogs::SaveFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
-					if (!filepath.empty()) 
-					{
-						// 反序列化已经保存的场景
-						SceneSerializer serializer(m_ActiveScene);
-						serializer.Serialize(filepath);
-					}
+					SaveSceneAs();
 				}
 
 
@@ -300,5 +282,82 @@ namespace Kaleidoscope
 	void EditorLayer::OnEvent(Event &e)
 	{
 		m_CameraController.OnEvent(e);
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(KLD_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		// Shortcuts
+		if (e.GetRepeatCount() > 0)
+		{
+			return false;
+		}
+
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+
+		switch (e.GetKeyCode())
+		{
+			case Key::N:
+			{
+				if (control)
+				{
+					NewScene();
+				}
+			}
+
+			case Key::O:
+			{
+				if (control)
+				{
+					OpenScene();
+				}
+			}
+
+			case Key::S:
+			{
+				if (control && shift)
+				{
+					SaveSceneAs();
+				}
+			}
+		}
+
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+		if (!filepath.empty())
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+			// 序列化当前场景	
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize("filepath");
+		}
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+		if (!filepath.empty())
+		{
+			// 反序列化已经保存的场景
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(filepath);
+		}
+	}
+
 }
