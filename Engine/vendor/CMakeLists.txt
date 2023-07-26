@@ -74,4 +74,11 @@ target_include_directories(stb_image PUBLIC ${stb_image_root_dir} )
 add_subdirectory(yaml-cpp)
 
 
+# nativeFileDialog
+set(native_file_dialog_root_dir ${CMAKE_CURRENT_SOURCE_DIR}/nativeFileDialog)
+file(GLOB_RECURSE native_file_dialog_headers  "${CMAKE_CURRENT_SOURCE_DIR}/nativeFileDialog/src/*.h")
+file(GLOB_RECURSE native_file_dialog_sources  "${CMAKE_CURRENT_SOURCE_DIR}/nativeFileDialog/src/*.c")
+add_library(native_file_dialog STATIC ${native_file_dialog_headers} ${native_file_dialog_sources})
+target_include_directories(native_file_dialog PUBLIC ${native_file_dialog_root_dir}/include )
+
 

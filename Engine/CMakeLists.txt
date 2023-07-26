@@ -21,6 +21,7 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/entt/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/yaml-cpp/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/nativeFileDialog/src/include
 
     
     # ${glad_include_dir}
@@ -58,5 +59,6 @@ target_link_libraries(
     imgui
     stb_image
     yaml-cpp
+    native_file_dialog
 )
 

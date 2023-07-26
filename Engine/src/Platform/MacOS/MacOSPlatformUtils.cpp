@@ -1,17 +1,65 @@
 #include "kldpch.h"
 #include "Kaleidoscope/Utils/PlatformUtils.h"
+#include "nfd.h"
 
 namespace Kaleidoscope 
 {
 	std::string FileDialogs::OpenFile(const char* filter) 
 	{
-		KLD_CORE_ERROR("MacOS not support Open File now!");
-		return " ";
+		/*
+		* filter syntax
+		* ; Begin a new filter.
+		* , Add a separate type to the filter.
+		* example "png,jpg;pdf"
+		*/
+		nfdchar_t* outPath = NULL;
+		nfdresult_t result = NFD_OpenDialog((nfdchar_t*)(filter), NULL, &outPath);
+
+		if (result == NFD_OKAY) 
+		{
+			puts("Success!");
+			puts(outPath);
+			puts(outPath);
+		}
+		else if (result == NFD_CANCEL) 
+		{
+			puts("User pressed cancel.");
+		}
+		else 
+		{
+			printf("Error: %s\n", NFD_GetError());
+		}
+
+		return std::string();
 	}
 
 	std::string FileDialogs::SaveFile(const char* filter) 
 	{
-		KLD_CORE_ERROR("MacOS not support Save File now!");
-		return " ";
+		/*
+		* filter syntax
+		* ; Begin a new filter.
+		* , Add a separate type to the filter.
+		* example "png,jpg;pdf"
+		*/
+
+		nfdchar_t* savePath = NULL;
+		nfdresult_t result = NFD_OpenDialog((nfdchar_t*)(filter), NULL, &savePath);
+
+		if (result == NFD_OKAY)
+		{
+			puts("Success!");
+			puts(savePath);
+			puts(savePath);
+		}
+		else if (result == NFD_CANCEL)
+		{
+			puts("User pressed cancel.");
+		}
+		else
+		{
+			printf("Error: %s\n", NFD_GetError());
+		}
+
+		return std::string();
 	}
 }
