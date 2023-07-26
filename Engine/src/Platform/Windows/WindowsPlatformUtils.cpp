@@ -1,6 +1,8 @@
 #include "kldpch.h"
 #include "Kaleidoscope/Utils/PlatformUtils.h"
 
+#ifdef KLD_PLATFORM_WINDOWS
+
 // Windows Only
 #include<commdlg.h>
 #include "GLFW/glfw3.h"
@@ -53,3 +55,5 @@ namespace Kaleidoscope
 		return std::string();
 	}
 }
+
+#endif // KLD_PLATFORM_WINDOWS

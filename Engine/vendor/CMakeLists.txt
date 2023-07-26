@@ -76,9 +76,30 @@ add_subdirectory(yaml-cpp)
 
 # nativeFileDialog
 set(native_file_dialog_root_dir ${CMAKE_CURRENT_SOURCE_DIR}/nativeFileDialog)
-file(GLOB_RECURSE native_file_dialog_headers  "${CMAKE_CURRENT_SOURCE_DIR}/nativeFileDialog/src/*.h")
-file(GLOB_RECURSE native_file_dialog_sources  "${CMAKE_CURRENT_SOURCE_DIR}/nativeFileDialog/src/*.c")
-add_library(native_file_dialog STATIC ${native_file_dialog_headers} ${native_file_dialog_sources})
-target_include_directories(native_file_dialog PUBLIC ${native_file_dialog_root_dir}/include )
+set(SOURCES ${native_file_dialog_root_dir}/src/nfd_common.c)
+include(CheckIncludeFile)
+macro(REQUIRE_INCLUDE_FILE path name)
+    CHECK_INCLUDE_FILE(${path} ${name})
+    if (NOT ${name})
+        message(FATAL_ERROR "${path} not found")
+    endif ()
+endmacro()
+
+# add specific implementations
+if (WIN32)
+    REQUIRE_INCLUDE_FILE(windows.h HAS_WINDOWS)
+    list(APPEND SOURCES ${native_file_dialog_root_dir}/src/nfd_win.cpp)
+elseif (APPLE)
+    REQUIRE_INCLUDE_FILE(AppKit/AppKit.h HAS_APPKIT)
+    list(APPEND SOURCES ${native_file_dialog_root_dir}/src/nfd_cocoa.m)
+elseif (UNIX)
+    REQUIRE_INCLUDE_FILE(gtk/gtk.h HAS_GTK)
+    list(APPEND SOURCES ${native_file_dialog_root_dir}/src/nfd_gtk.c)
+elseif (UNIX)
+    message(FATAL_ERROR "Cannot detect your system, please report to https://github.com/aarcangeli/nativefiledialog-cmake/issues")
+endif ()
+
+add_library(native_file_dialog STATIC ${SOURCES} )
+target_include_directories(native_file_dialog PUBLIC ${native_file_dialog_root_dir}/src/include )
 
 

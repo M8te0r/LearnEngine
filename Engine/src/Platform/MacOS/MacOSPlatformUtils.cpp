@@ -1,5 +1,8 @@
 #include "kldpch.h"
 #include "Kaleidoscope/Utils/PlatformUtils.h"
+
+#ifdef KLD_PLATFORM_MACOS
+// MacOS
 #include "nfd.h"
 
 namespace Kaleidoscope 
@@ -63,3 +66,4 @@ namespace Kaleidoscope
 		return std::string();
 	}
 }
+#endif // KLD_PLATFORM_MACOS
