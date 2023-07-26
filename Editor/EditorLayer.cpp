@@ -336,7 +336,15 @@ namespace Kaleidoscope
 
 	void EditorLayer::OpenScene()
 	{
+#ifdef KLD_PLATFORM_WINDOWS
 		std::string filepath = FileDialogs::OpenFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+#endif // KLD_PLATFORM_WINDOWS
+
+#ifdef KLD_PLATFORM_MACOS
+		std::string filepath = FileDialogs::OpenFile("kld");
+#endif // KLD_PLATFORM_MACOS
+
+
 		if (!filepath.empty())
 		{
 			m_ActiveScene = CreateRef<Scene>();
@@ -345,13 +353,20 @@ namespace Kaleidoscope
 
 			// 序列化当前场景	
 			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize("filepath");
+			serializer.Deserialize(filepath);
 		}
 	}
 
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = FileDialogs::SaveFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+#ifdef KLD_PLATFORM_WINDOWS
+		std::string filepath = FileDialogs::OpenFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+#endif // KLD_PLATFORM_WINDOWS
+
+#ifdef KLD_PLATFORM_MACOS
+		std::string filepath = FileDialogs::OpenFile("kld");
+#endif // KLD_PLATFORM_MACOS
+
 		if (!filepath.empty())
 		{
 			// 反序列化已经保存的场景
