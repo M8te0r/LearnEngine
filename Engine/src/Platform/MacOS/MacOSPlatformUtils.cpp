@@ -5,30 +5,32 @@
 // MacOS
 #include "nfd.h"
 
-namespace Kaleidoscope 
+namespace Kaleidoscope
 {
-	std::optional<std::string> FileDialogs::OpenFile(const char* filter)
+	std::optional<std::string> FileDialogs::OpenFile(const char *filter)
 	{
 		/*
-		* filter syntax
-		* ; Begin a new filter.
-		* , Add a separate type to the filter.
-		* example "png,jpg;pdf"
-		*/
-		nfdchar_t* outPath = NULL;
-		nfdresult_t result = NFD_OpenDialog((nfdchar_t*)(filter), NULL, &outPath);
+		 * filter syntax
+		 * ; Begin a new filter.
+		 * , Add a separate type to the filter.
+		 * example "png,jpg;pdf"
+		 */
+		nfdchar_t *outPath = NULL;
+		nfdresult_t result = NFD_OpenDialog((nfdchar_t *)(filter), NULL, &outPath);
 
-		if (result == NFD_OKAY) 
+		if (result == NFD_OKAY)
 		{
 			puts("Success!");
 			puts(outPath);
 			puts(outPath);
+
+			return static_cast<std::string>(outPath);
 		}
-		else if (result == NFD_CANCEL) 
+		else if (result == NFD_CANCEL)
 		{
 			puts("User pressed cancel.");
 		}
-		else 
+		else
 		{
 			printf("Error: %s\n", NFD_GetError());
 		}
@@ -36,23 +38,25 @@ namespace Kaleidoscope
 		return std::nullopt;
 	}
 
-	std::optional<std::string> FileDialogs::SaveFile(const char* filter)
+	std::optional<std::string> FileDialogs::SaveFile(const char *filter)
 	{
 		/*
-		* filter syntax
-		* ; Begin a new filter.
-		* , Add a separate type to the filter.
-		* example "png,jpg;pdf"
-		*/
+		 * filter syntax
+		 * ; Begin a new filter.
+		 * , Add a separate type to the filter.
+		 * example "png,jpg;pdf"
+		 */
 
-		nfdchar_t* savePath = NULL;
-		nfdresult_t result = NFD_OpenDialog((nfdchar_t*)(filter), NULL, &savePath);
+		nfdchar_t *savePath = NULL;
+		nfdresult_t result = NFD_OpenDialog((nfdchar_t *)(filter), NULL, &savePath);
 
 		if (result == NFD_OKAY)
 		{
 			puts("Success!");
 			puts(savePath);
 			puts(savePath);
+
+			return static_cast<std::string>(savePath);
 		}
 		else if (result == NFD_CANCEL)
 		{
