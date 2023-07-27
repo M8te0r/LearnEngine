@@ -6,6 +6,15 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "Kaleidoscope/Scene/Components.h"
 
+#include <cstring>
+
+/* The Microsoft C++ compiler is non-compliant with the C++ standard and needs
+ * the following definition to disable a security warning on std::strncpy().
+ */
+#ifdef _MSVC_LANG
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 namespace Kaleidoscope
 {
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene> &context)
@@ -243,7 +252,8 @@ namespace Kaleidoscope
 			memset(buffer, 0, sizeof(buffer)); // 设置buffer的所有内容为0
 			// strcpy_s(buffer, sizeof(buffer), tag.c_str()); // 安全拷贝，strcpy_s是windows系统特有的版本
 			// strlcpy(buffer, tag.c_str(), sizeof(buffer)); // 安全拷贝，strlcpy是MacOS支持的版本
-			strcpy(buffer, tag.c_str()); // buffer设置初值
+			// strcpy(buffer, tag.c_str()); // buffer设置初值
+			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
 
 			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))// 名字前添加"##"隐藏这个label
 			{
@@ -264,13 +274,27 @@ namespace Kaleidoscope
 		{
 			if (ImGui::MenuItem("Camera"))
 			{
-				m_SelectionContext.AddComponent<CameraComponent>();
+				if (!m_SelectionContext.HasComponent<CameraComponent>()) 
+				{
+					m_SelectionContext.AddComponent<CameraComponent>();
+				}
+				else 
+				{
+					KLD_CORE_WARN("This entity already has the Camera Component!");
+				}
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (ImGui::MenuItem("Sprite Renderer"))
 			{
-				m_SelectionContext.AddComponent<SpriteRendererComponent>();
+				if (!m_SelectionContext.HasComponent<SpriteRendererComponent>())
+				{
+					m_SelectionContext.AddComponent<SpriteRendererComponent>();
+				}
+				else
+				{
+					KLD_CORE_WARN("This entity already has the Sprite Renderer Component!");
+				}
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();

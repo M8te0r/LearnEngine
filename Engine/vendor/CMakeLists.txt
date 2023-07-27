@@ -104,3 +104,11 @@ add_library(native_file_dialog STATIC ${SOURCES} )
 target_include_directories(native_file_dialog PUBLIC ${native_file_dialog_root_dir}/src/include )
 
 
+# ImGuizmo
+set(imguizmo_root_dir ${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo)
+file(GLOB_RECURSE imguizmo_headers  "${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo/ImGuizmo.h")
+file(GLOB_RECURSE imguizmo_sources  "${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo/ImGuizmo.cpp")
+add_library(ImGuizmo STATIC ${imguizmo_headers} ${imguizmo_sources})
+target_include_directories(ImGuizmo PUBLIC ${imguizmo_root_dir} )
+target_link_libraries(ImGuizmo PUBLIC imgui)
+

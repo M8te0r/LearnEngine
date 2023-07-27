@@ -7,7 +7,7 @@
 
 namespace Kaleidoscope 
 {
-	std::string FileDialogs::OpenFile(const char* filter) 
+	std::optional<std::string> FileDialogs::OpenFile(const char* filter)
 	{
 		/*
 		* filter syntax
@@ -33,10 +33,10 @@ namespace Kaleidoscope
 			printf("Error: %s\n", NFD_GetError());
 		}
 
-		return std::string();
+		return std::nullopt;
 	}
 
-	std::string FileDialogs::SaveFile(const char* filter) 
+	std::optional<std::string> FileDialogs::SaveFile(const char* filter)
 	{
 		/*
 		* filter syntax
@@ -63,7 +63,7 @@ namespace Kaleidoscope
 			printf("Error: %s\n", NFD_GetError());
 		}
 
-		return std::string();
+		return std::nullopt;
 	}
 }
 #endif // KLD_PLATFORM_MACOS
