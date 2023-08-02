@@ -54,12 +54,18 @@ namespace Kaleidoscope
 
         {
             KLD_PROFILE_SCOPE("glfwCreateWindow");
+
+            
+
+#ifdef KLD_PLATFORM_MACOS
             // GL 3.2 + GLSL 150
             // const char *glsl_version = "#version 150";
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);         // Required on Mac
+#endif // KLD_PLATFORM_MACOS
+
 
             m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
             ++s_GLFWWindowCount;

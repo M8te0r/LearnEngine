@@ -25,8 +25,8 @@ namespace Kaleidoscope
         // FIXME spdlog 不再支持unsigned const char* 数据（glGetString()返回的）
         // https://github.com/fmtlib/fmt/issues/2705
         KLD_CORE_INFO("  Vendor: {0}", reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
-        KLD_CORE_INFO("  Vendor: {0}", reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
-        KLD_CORE_INFO("  Vendor: {0}", reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+        KLD_CORE_INFO("  Renderer: {0}", reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+        KLD_CORE_INFO("  Version: {0}", reinterpret_cast<const char *>(glGetString(GL_VERSION)));
 
         // KLD_CORE_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
         // KLD_CORE_INFO("  Version: {0}", glGetString(GL_VERSION));
