@@ -458,11 +458,11 @@ namespace Kaleidoscope
 	void EditorLayer::SaveSceneAs()
 	{
 #ifdef KLD_PLATFORM_WINDOWS
-		std::optional<std::string> filepath = FileDialogs::OpenFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
+		std::optional<std::string> filepath = FileDialogs::SaveFile("Kaleidoscope Scene (*.kld)\0*.kld\0");
 #endif // KLD_PLATFORM_WINDOWS
 
 #ifdef KLD_PLATFORM_MACOS
-		std::optional<std::string> filepath = FileDialogs::OpenFile("kld");
+		std::optional<std::string> filepath = FileDialogs::SaveFile("kld");
 #endif // KLD_PLATFORM_MACOS
 
 		if (filepath)

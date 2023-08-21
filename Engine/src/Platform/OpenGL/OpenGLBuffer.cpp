@@ -13,9 +13,10 @@ namespace Kaleidoscope
     {
         KLD_PROFILE_FUNCTION();
 
-        // FIXME glCreateBuffers(1, &m_RendererID); OpenGL 4.5以上才支持
+        //glCreateBuffers(1, &m_RendererID); // FIXME: OpenGL 4.5以上才支持
         glGenBuffers(1, &m_RendererID);
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+
         glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);// dynamic draw，buffer的数据大小是动态的，所以动态绘制
     }
 
@@ -23,9 +24,10 @@ namespace Kaleidoscope
     {
         KLD_PROFILE_FUNCTION();
 
-        // FIXME glCreateBuffers(1, &m_RendererID); OpenGL 4.5以上才支持
+        //glCreateBuffers(1, &m_RendererID); // FIXME: OpenGL 4.5以上才支持
         glGenBuffers(1, &m_RendererID);
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+        
         glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
     }
 
