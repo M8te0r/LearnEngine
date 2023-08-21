@@ -24,7 +24,7 @@ namespace Kaleidoscope
         static const uint32_t MaxVertices = MaxQuads * 4;
         static const uint32_t MaxIndices = MaxQuads * 6;
 
-        static const uint32_t MaxTextureSlots = 16; // TODO: Apple only support 16 unit
+        static const uint32_t MaxTextureSlots = 16; // TODO: 正常来说是32，但是苹果只支持 16 unit
 
         Ref<VertexArray> QuadVertexArray;
         Ref<VertexBuffer> QuadVertexBuffer;
@@ -112,6 +112,8 @@ namespace Kaleidoscope
     void Renderer2D::Shutdown()
     {
         KLD_PROFILE_FUNCTION();
+
+        delete[] s_Data.QuadVertexBufferBase;
     }
 
     void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
@@ -123,11 +125,6 @@ namespace Kaleidoscope
         s_Data.TextureShader->Bind();
         s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
 
-        s_Data.QuadIndexCount = 0;
-        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-        s_Data.TextureSlotIndex = 1;
-
         StartBatch();
     }
 
@@ -137,11 +134,6 @@ namespace Kaleidoscope
 
         s_Data.TextureShader->Bind();
         s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-
-        s_Data.QuadIndexCount = 0;
-        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-        s_Data.TextureSlotIndex = 1;
 
         StartBatch();
     }
@@ -177,6 +169,10 @@ namespace Kaleidoscope
 
     void Renderer2D::Flush()
     {
+        if (s_Data.QuadIndexCount == 0)
+        {
+            return; // Nothing to draw
+        }
 
         uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
 		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
