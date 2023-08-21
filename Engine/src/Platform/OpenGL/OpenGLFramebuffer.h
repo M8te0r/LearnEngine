@@ -29,7 +29,7 @@ namespace Kaleidoscope
 		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;
 		FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::None;
 
-		std::vector<uint32_t> m_ColorAttachments;
-		uint32_t m_DepthAttachment = 0;
+		std::vector<uint32_t> m_ColorAttachments;	// 颜色附件的id
+		uint32_t m_DepthAttachment = 0;				// 深度附件的id
 	};
 }

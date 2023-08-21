@@ -28,7 +28,7 @@ namespace Kaleidoscope
 		m_CheckerboardTexture = Texture2D::Create("../Editor/assets/textures/Checkerboard.png");
 
 		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8,FramebufferTextureFormat::RGBA8,FramebufferTextureFormat::Depth };
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8,FramebufferTextureFormat::Depth };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
@@ -114,7 +114,7 @@ namespace Kaleidoscope
 		// Resize
 		if (
 			FramebufferSpecification spec = m_Framebuffer->GetSpecification();
-			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
@@ -128,6 +128,7 @@ namespace Kaleidoscope
 		{
 			m_CameraController.OnUpdate(ts);
 		}
+
 		m_EditorCamera.OnUpdate(ts);
 
 
@@ -280,7 +281,7 @@ namespace Kaleidoscope
 		m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
 
 		// TODO: 这里有问题，删除了entity后依然会显示最后一次的framebuffer
-		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID(1);
+		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
 		
 		

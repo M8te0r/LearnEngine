@@ -47,6 +47,7 @@ namespace Kaleidoscope {
 
 			}
 
+			// 把attachment绑定到framebuffer上
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, TextureTarget(multisampled), id, 0);
 		}
 
@@ -60,7 +61,8 @@ namespace Kaleidoscope {
 			else
 			{
 				// glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);	//FIXME OpenGL 4.2 after
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
+				// glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
+				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
 
 
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -80,7 +82,6 @@ namespace Kaleidoscope {
 			{
 			case Kaleidoscope::FramebufferTextureFormat::DEPTH24STENCIL8:
 				return true;
-				break;
 			}
 			return false;
 		}
@@ -139,9 +140,9 @@ namespace Kaleidoscope {
 
 		// 创建颜色信息附件
 		// attachments
-		if (m_ColorAttachmentSpecifications.size()) 
+		if (m_ColorAttachmentSpecifications.size()) // 检查是否有color attachement
 		{
-			m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());
+			m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());// 修改数组大小，准备填充
 			Utils::CreateTextures(multisample, m_ColorAttachments.data(), m_ColorAttachments.size());
 
 			for (size_t i = 0; i < m_ColorAttachments.size(); i++)
@@ -155,7 +156,8 @@ namespace Kaleidoscope {
 				}
 			}
 		}
-
+		
+		// 创建深度附件
 		if (m_DepthAttachmentSpecification.TextureFormat != FramebufferTextureFormat::None)
 		{
 			Utils::CreateTextures(multisample, &m_DepthAttachment, 1);
