@@ -96,7 +96,9 @@ namespace Kaleidoscope
         }
 
         // 根据图片生成纹理
-        s_Data.TextureShader = Shader::Create("../Sandbox/assets/shaders/Texture.glsl");
+        // 注意：这里的路径一定要及时更改，因为在debug时，运行的程序路径是在../bin下面的，不更改会使用错误的shader
+        s_Data.TextureShader = Shader::Create("../Editor/assets/shaders/Texture.glsl");
+        //s_Data.TextureShader = Shader::Create("../Sandbox/assets/shaders/Texture.glsl");
         s_Data.TextureShader->Bind();
         s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 

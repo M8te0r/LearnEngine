@@ -36,7 +36,7 @@ namespace Kaleidoscope
 		// 激活场景
 		m_ActiveScene = CreateRef<Scene>();
 
-		m_EditorCamera = EditorCamera(30.0, 1.778f, 0.1f, 1000.0f);
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 #if 0
 		// 创建entity
@@ -155,7 +155,7 @@ namespace Kaleidoscope
 
 		if(mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
-			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
+			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY); // 从frambuffer的attachment1里面读取数据
 			KLD_CORE_WARN("Pixel Data = {0}", pixelData);
 		}
 
@@ -271,10 +271,10 @@ namespace Kaleidoscope
 			ImGui::EndMenuBar();
 		}
 
-		// 实体层级视窗
+		/* 实体层级视窗 */
 		m_SceneHierarchyPanel.OnImGuiRender();
 
-		// 属性操作视窗
+		/* 属性操作视窗 */
 		ImGui::Begin("Stats");
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -285,7 +285,7 @@ namespace Kaleidoscope
 
 		ImGui::End();
 
-		// viewport视窗
+		/* viewport视窗 */
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
 		ImGui::Begin("Viewport");
 		auto viewportOffset = ImGui::GetCursorPos();
@@ -299,7 +299,7 @@ namespace Kaleidoscope
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
 
-		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID(); // 将framebuffer像纹理一样贴在viewport视窗上
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
 		
 		// 获取窗口所在屏幕的最小边界和最大边界
@@ -413,6 +413,7 @@ namespace Kaleidoscope
 				{
 					NewScene();
 				}
+				break;
 			}
 
 			case Key::O:
@@ -421,6 +422,7 @@ namespace Kaleidoscope
 				{
 					OpenScene();
 				}
+				break;
 			}
 
 			case Key::S:
@@ -429,6 +431,7 @@ namespace Kaleidoscope
 				{
 					SaveSceneAs();
 				}
+				break;
 			}
 
 			// Gizmos

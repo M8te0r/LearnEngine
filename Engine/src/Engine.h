@@ -31,7 +31,6 @@
 #include "Kaleidoscope/Renderer/Shader.h"
 #include "Kaleidoscope/Renderer/Framebuffer.h"
 #include "Kaleidoscope/Renderer/Texture.h"
-#include "Kaleidoscope/Renderer/SubTexture2D.h"
 #include "Kaleidoscope/Renderer/VertexArray.h"
 
 

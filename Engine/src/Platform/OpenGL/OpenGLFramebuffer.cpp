@@ -17,8 +17,6 @@ namespace Kaleidoscope {
 
 		static void CreateTextures(bool multisampled, uint32_t* outID, uint32_t count) 
 		{
-
-			//glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachment);
 			//glCreateTextures(TextureTarget(multisampled), count, outID);// FIXME: OpenGL 4.5以上
 			glGenTextures(count, outID);
 		}
@@ -250,6 +248,7 @@ namespace Kaleidoscope {
 	{
 		KLD_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
 		
+		//FIXME: 第二张framebuffer的值全是RGBA类型的，导致按GL_RED_INTEGER的值读取返回错误
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex); // 读取shader中返回的int型color的值“50”
 		int pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData); // 读取坐标从[x,y]到[x+1,y+1]处的像素，以GL_INT的格式返回保存至pixelData中

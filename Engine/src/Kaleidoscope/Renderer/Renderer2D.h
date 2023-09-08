@@ -2,7 +2,6 @@
 #include "Kaleidoscope/Renderer/OrthographicCamera.h"
 #include "Kaleidoscope/Renderer/Camera.h"
 #include "Kaleidoscope//Renderer/Texture.h"
-#include "Kaleidoscope//Renderer/SubTexture2D.h"
 
 #include "Kaleidoscope/Renderer/EditorCamera.h"
 

@@ -67,7 +67,7 @@ namespace Kaleidoscope
     {
         KLD_PROFILE_FUNCTION();
 
-        // FIXME glCreateBuffers(1, &m_RendererID);OpenGL 4.5以上才支持
+        // glCreateBuffers(1, &m_RendererID); // FIXME: OpenGL 4.5以上才支持
         glGenBuffers(1, &m_RendererID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
