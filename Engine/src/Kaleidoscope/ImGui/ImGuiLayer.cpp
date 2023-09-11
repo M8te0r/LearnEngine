@@ -43,8 +43,8 @@ namespace Kaleidoscope
 #endif
 
         // 设置外部字体为默认字体
-        io.Fonts->AddFontFromFileTTF("../Editor/assets/fonts/OpenSans/OpenSans-Bold.ttf", 18.0f);
-        io.FontDefault = io.Fonts->AddFontFromFileTTF("../Editor/assets/fonts/OpenSans/OpenSans-Regular.ttf", 18.0f);
+        io.Fonts->AddFontFromFileTTF("../Editor/assets/fonts/OpenSans/OpenSans-Bold.ttf", 38.0f);
+        io.FontDefault = io.Fonts->AddFontFromFileTTF("../Editor/assets/fonts/OpenSans/OpenSans-Regular.ttf", 38.0f);
 
 
         ImGui::StyleColorsDark();
