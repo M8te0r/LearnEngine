@@ -26,8 +26,8 @@ namespace Kaleidoscope
         glGenTextures(1, &m_RendererID);
         glBindTexture(GL_TEXTURE_2D, m_RendererID);
 
-        glTexStorage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height);
-        // glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, nullptr);
+        // glTexStorage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height); // FIXME: OpenGL 4.2 above
+        glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, nullptr);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
