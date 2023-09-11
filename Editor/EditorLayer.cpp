@@ -141,6 +141,9 @@ namespace Kaleidoscope
 
 		// Renderer2D::BeginScene(m_CameraController.GetCamera());
 
+		// Clear our entity ID attachment to -1
+		m_Framebuffer->ClearAttachment(1, -1);
+
 		// Update Scene
 		// m_ActiveScene->OnUpdateRuntime(ts);
 		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);

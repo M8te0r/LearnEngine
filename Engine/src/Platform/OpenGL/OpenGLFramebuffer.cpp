@@ -84,6 +84,21 @@ namespace Kaleidoscope {
 			return false;
 		}
 
+		static GLenum KLDFramebufferTextureFormatToGL(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case Kaleidoscope::FramebufferTextureFormat::RGBA8:
+				return GL_RGBA8;
+			case Kaleidoscope::FramebufferTextureFormat::RED_INTEGER:
+				return GL_RED_INTEGER;
+			}
+
+			KLD_CORE_ASSERT(false);
+			return 0;
+		}
+
+
 
 	}
 
@@ -254,6 +269,19 @@ namespace Kaleidoscope {
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData); // 读取坐标从[x,y]到[x+1,y+1]处的像素，以GL_INT的格式返回保存至pixelData中
 
 		return pixelData;
+	}
+
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		KLD_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+
+
+		// auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
+		// glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::KLDFramebufferTextureFormatToGL(spec.TextureFormat), GL_INT, &value); // FIXME: OpenGL 4.4 above
+
+		// TODO: 找到OpenGL 4.1 的替代
+		GLint values[4] = { -1 };
+		glClearBufferiv(GL_COLOR, attachmentIndex, &value);
 	}
 
 
